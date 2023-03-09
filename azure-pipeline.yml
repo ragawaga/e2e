@@ -1,0 +1,40 @@
+parameters:
+  - name: hostname
+    displayName: Hostname of enhancements platform
+    type: string
+    default: chw-web-dev.azurefd.net
+
+
+trigger: none
+
+jobs:
+  - deployment: Run_E2E_Tests
+    pool:
+      vmImage: ubuntu-20.04
+    container: mcr.microsoft.com/playwright:v1.31.0-focal
+    environment: test
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - checkout: self
+            - task: Bash@3
+              displayName: 'Run Playwright tests'
+              env:
+                CI: true
+              inputs:
+                targetType: 'inline'
+                failOnStderr: false
+                script: |
+                  yarn
+                  yarn playwright test
+            - task: PublishTestResults@2
+              displayName: 'Publish test results'
+              inputs:
+                searchFolder: 'test-results'
+                testResultsFormat: 'JUnit'
+                testResultsFiles: 'e2e-junit-results.xml'
+                mergeTestResults: true
+                failTaskOnFailedTests: true
+                testRunTitle: 'End-to-end Test Results'
+              condition: succeededOrFailed()
