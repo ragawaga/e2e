@@ -19,7 +19,7 @@ jobs:
           steps:
             - checkout: self
             - task: Bash@3
-              displayName: 'Run Playwright tests'
+              displayName: 'Install dependencies'
               env:
                 CI: true
               inputs:
@@ -27,6 +27,14 @@ jobs:
                 failOnStderr: false
                 script: |
                   yarn
+            - task: Bash@3
+              displayName: 'Run Playwright tests'
+              env:
+                CI: true
+              inputs:
+                targetType: 'inline'
+                failOnStderr: true
+                script: |
                   yarn playwright test
             - task: PublishTestResults@2
               displayName: 'Publish test results'
@@ -37,4 +45,12 @@ jobs:
                 mergeTestResults: true
                 failTaskOnFailedTests: true
                 testRunTitle: 'End-to-end Test Results'
+              condition: succeededOrFailed()
+            - task: AzureCLI@2
+              inputs:
+                azureSubscription: 'Microsoft Azure - CRU Online Development (bbe03d7e-0fe4-4f65-a765-9427e562b572)'
+                scriptType: 'bash'
+                scriptLocation: 'inlineScript'
+                inlineScript: |
+                  az storage blob upload-batch --account-name crutestreports --destination \$web/playwright --source "playwright-report/"
               condition: succeededOrFailed()
