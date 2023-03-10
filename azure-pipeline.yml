@@ -4,6 +4,8 @@ parameters:
     type: string
     default: chw-web-dev.azurefd.net
 
+variables:
+  YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
 
 trigger: none
 
@@ -11,46 +13,65 @@ jobs:
   - deployment: Run_E2E_Tests
     pool:
       vmImage: ubuntu-20.04
-    container: mcr.microsoft.com/playwright:v1.31.0-focal
+    container: 'mcr.microsoft.com/playwright:v1.31.0-focal'
     environment: test
     strategy:
       runOnce:
         deploy:
           steps:
             - checkout: self
+            - task: Cache@2
+              inputs:
+                key: '"yarn" | "$(Agent.OS)" | yarn.lock'
+                restoreKeys: |
+                  yarn | "$(Agent.OS)"
+                  yarn
+                path: $(YARN_CACHE_FOLDER)
             - task: Bash@3
-              displayName: 'Install dependencies'
+              displayName: Install dependencies
               env:
                 CI: true
               inputs:
-                targetType: 'inline'
+                targetType: inline
                 failOnStderr: false
                 script: |
                   yarn
             - task: Bash@3
-              displayName: 'Run Playwright tests'
+              displayName: Run Playwright tests
               env:
                 CI: true
               inputs:
-                targetType: 'inline'
+                targetType: inline
                 failOnStderr: true
                 script: |
                   yarn playwright test
             - task: PublishTestResults@2
-              displayName: 'Publish test results'
+              displayName: Publish test results
               inputs:
-                searchFolder: 'test-results'
-                testResultsFormat: 'JUnit'
-                testResultsFiles: 'e2e-junit-results.xml'
+                searchFolder: test-results
+                testResultsFormat: JUnit
+                testResultsFiles: e2e-junit-results.xml
                 mergeTestResults: true
                 failTaskOnFailedTests: true
-                testRunTitle: 'End-to-end Test Results'
+                testRunTitle: End-to-end Test Results
               condition: succeededOrFailed()
-            - task: AzureCLI@2
-              inputs:
-                azureSubscription: 'Microsoft Azure - CRU Online Development (bbe03d7e-0fe4-4f65-a765-9427e562b572)'
-                scriptType: 'bash'
-                scriptLocation: 'inlineScript'
-                inlineScript: |
-                  az storage blob upload-batch --account-name crutestreports --destination \$web/playwright --source "playwright-report/"
-              condition: succeededOrFailed()
+            - publish: $(Pipeline.Workspace)/playwright-report
+              displayName: Publish powershell scripts for later use
+              artifact: test-report
+  - job: Upload_E2E_Report
+    condition: succeededOrFailed()
+    pool:
+      vmImage: ubuntu-20.04
+    steps:
+      - download: current
+        artifact: test-report
+      - task: AzureCLI@2
+        inputs:
+          azureSubscription: >-
+            Microsoft Azure - CRU Online Development
+            (bbe03d7e-0fe4-4f65-a765-9427e562b572)
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            az storage blob upload-batch --account-name crutestreports --destination \$web/playwright --source "test-report/"
+        condition: succeededOrFailed()
