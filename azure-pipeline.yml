@@ -20,20 +20,13 @@ jobs:
         deploy:
           steps:
             - checkout: self
-            - task: Cache@2
-              inputs:
-                key: '"yarn" | "$(Agent.OS)" | yarn.lock'
-                restoreKeys: |
-                  yarn | "$(Agent.OS)"
-                  yarn
-                path: $(YARN_CACHE_FOLDER)
             - task: Bash@3
               displayName: Run Playwright tests
               env:
                 CI: true
               inputs:
                 targetType: inline
-                failOnStderr: true
+                failOnStderr: false
                 script: |
                   yarn
                   yarn playwright test
@@ -47,7 +40,7 @@ jobs:
                 failTaskOnFailedTests: true
                 testRunTitle: End-to-end Test Results
               condition: succeededOrFailed()
-            - publish: $(Pipeline.Workspace)/playwright-report
+            - publish: playwright-report
               displayName: Publish powershell scripts for later use
               artifact: test-report
               condition: succeededOrFailed()
@@ -68,5 +61,5 @@ jobs:
           scriptType: bash
           scriptLocation: inlineScript
           inlineScript: |
-            az storage blob upload-batch --account-name crutestreports --destination \$web/playwright --source "test-report/"
+            az storage blob upload-batch --account-name crutestreports --destination \$web/playwright --source "$(Pipeline.Workspace)/test-report/"
         condition: succeededOrFailed()
