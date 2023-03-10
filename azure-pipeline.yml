@@ -1,3 +1,10 @@
+resources:
+  repositories:
+    - repository: cypress-tests
+      type: github
+      name: digirati-co-uk/cru-headless-web
+      endpoint: digirati-co-uk
+
 parameters:
   - name: hostname
     displayName: Hostname of enhancements platform
@@ -10,6 +17,14 @@ variables:
 trigger: none
 
 jobs:
+  - job: Run_E2E_Tests_Cypress
+    pool:
+      vmImage: ubuntu-20.04
+    steps:
+      - checkout: self
+      - checkout: cypress-tests
+      - script: npx browserstack-cypress-cli --async
+        workingDirectory: $(Build.SourcesDirectory)/cru-headless-web
   - deployment: Run_E2E_Tests
     pool:
       vmImage: ubuntu-20.04
