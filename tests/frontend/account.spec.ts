@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { asAuthenticatedUser } from "./auth";
+import { asAuthenticatedUser } from "../auth";
 
 test.describe("a logged in user with full permissions", () => {
   asAuthenticatedUser();
@@ -18,6 +18,7 @@ test.describe("a logged in user with full permissions", () => {
       await expect(page.getByTestId(`account-${field}`)).toContainText(value);
     }
 
+    await page.waitForLoadState("networkidle");
     await expect(page).toHaveScreenshot();
   });
 });

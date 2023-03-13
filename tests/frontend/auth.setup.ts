@@ -1,5 +1,5 @@
 import { expect, test as setup } from "@playwright/test";
-import { sessionFile } from "./auth";
+import { sessionFile, umbracoSessionFile } from "../auth";
 
 setup("login as user", async ({ page }) => {
   await page.goto("/login");

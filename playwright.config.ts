@@ -1,12 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 
 /**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// require('dotenv').config();
-
-/**
  * See https://playwright.dev/docs/test-configuration.
  */
 
@@ -28,7 +22,7 @@ export default defineConfig({
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 1,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : 1,
+  workers: process.env.CI ? 1 : 4,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     ["html", { outputFolder: "playwright-report" }],
@@ -48,20 +42,41 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: "setup",
+      name: "frontend-setup",
       testMatch: /.*\.setup\.ts/,
+      testDir: "./tests/frontend",
       use: {
         baseURL: "https://chw-web-dev.azurefd.net/",
       },
     },
     {
-      name: "chromium",
+      name: "editor-setup",
+      testMatch: /.*\.setup\.ts/,
+      testDir: "./tests/editor",
+      use: {
+        baseURL: "https://crudev.northeurope.cloudapp.azure.com/",
+      },
+    },
+    {
+      name: "frontend",
       use: {
         ...devices["Desktop Chrome"],
         baseURL: "https://chw-web-dev.azurefd.net/",
         trace: "on",
       },
-      dependencies: ["setup"],
+      testDir: "./tests/frontend",
+      dependencies: ["frontend-setup"],
+      testMatch: /.*\.spec\.ts/,
+    },
+    {
+      name: "editor",
+      use: {
+        ...devices["Desktop Chrome"],
+        baseURL: "https://crudev.northeurope.cloudapp.azure.com/",
+        trace: "on",
+      },
+      testDir: "./tests/editor",
+      dependencies: ["editor-setup"],
       testMatch: /.*\.spec\.ts/,
     },
     /* Test against mobile viewports. */

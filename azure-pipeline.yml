@@ -23,8 +23,6 @@ jobs:
     steps:
       - checkout: self
       - checkout: cypress-tests
-      - script: npx browserstack-cypress-cli --async
-        workingDirectory: $(Build.SourcesDirectory)/cru-headless-web
   - deployment: Run_E2E_Tests
     pool:
       vmImage: ubuntu-20.04
