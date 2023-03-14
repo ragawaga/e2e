@@ -74,5 +74,5 @@ jobs:
           scriptType: bash
           scriptLocation: inlineScript
           inlineScript: |
-            az storage blob upload-batch --account-name crutestreports --destination \$web/playwright --source "$(Pipeline.Workspace)/test-report/"
+            az storage blob upload-batch --account-name crutestreports --destination \$web/playwright --source "$(Pipeline.Workspace)/test-report/" --overwrite true
         condition: succeededOrFailed()
