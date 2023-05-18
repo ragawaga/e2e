@@ -1,3 +1,10 @@
+schedules:
+  - cron: '0 18 * * *'
+    displayName: 6pm build
+    branches:
+      include:
+        - develop
+
 resources:
   repositories:
     - repository: cypress-tests
