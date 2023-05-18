@@ -136,7 +136,7 @@ jobs:
               artifact: test-report
               condition: succeededOrFailed()
   - job: Upload_E2E_Report
-    condition: succeededOrFailed()
+    condition: always()
     dependsOn:
       - Run_E2E_Tests
       - Run_E2E_Tests_Cypress
