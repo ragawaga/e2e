@@ -39,7 +39,7 @@ jobs:
               "AUTH0_ENDPOINT": "https://auth.dev.crugroup.com/oauth/token"
           }
           EOF
-
+          BUILD_NAME=$(date +"%Y-%m-%d")
           cat > browserstack.json <<EOF
           {
               "auth": {
@@ -51,14 +51,23 @@ jobs:
                       "browser": "chrome",
                       "os": "Windows 10",
                       "versions": [
-                          "latest"
+                          "latest",
+                          "latest-1"
+                      ]
+                  },
+                  {
+                      "browser": "edge",
+                      "os": "Windows 10",
+                      "versions": [
+                          "latest",
+                          "latest-1"
                       ]
                   }
               ],
               "run_settings": {
                   "cypress_config_file": "cypress.json",
                   "project_name": "CRU Enhancements - Nightly",
-                  "build_name": "build-name",
+                  "build_name": "$BUILD_NAME",
                   "exclude": [],
                   "parallels": "1",
                   "npm_dependencies": {
