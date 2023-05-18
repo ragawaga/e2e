@@ -28,14 +28,7 @@ jobs:
         inputs:
           versionSpec: 16.x
           checkLatest: true
-      - displayName: Create Cypress configuration
-        env:
-          AUTH0_CLIENT_SECRET: $(Auth0ClientSecret)
-          GOOD_CREDENTIALS: $(GoodCredentials)
-          RESTRICTED_CREDENTIALS: $(RestrictedCredentials)
-          BROWSERSTACK_TOKEN: $(BrowserstackToken)
-        workingDirectory: cru-headless-web
-        script: |
+      - script: |
           
           cat > cypress-tests/cypress.env.json <<EOF
           {
@@ -85,8 +78,13 @@ jobs:
               "disable_usage_reporting": false
           }
           EOF
-          
           npx browserstack-cypress-cli run
+        env:
+          AUTH0_CLIENT_SECRET: $(Auth0ClientSecret)
+          GOOD_CREDENTIALS: $(GoodCredentials)
+          RESTRICTED_CREDENTIALS: $(RestrictedCredentials)
+          BROWSERSTACK_TOKEN: $(BrowserstackToken)
+        workingDirectory: cru-headless-web
 
   - deployment: Run_E2E_Tests
     pool:
