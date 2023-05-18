@@ -36,8 +36,7 @@ jobs:
           versionSpec: 16.x
           checkLatest: true
       - script: |
-          
-          cat > cypress-tests/cypress.env.json <<EOF
+          cat > cypress.env.json <<EOF
           {
               "LOGIN_SCREEN__GOOD_CREDENTIALS": "$GOOD_CREDENTIALS",
               "LOGIN_SCREEN__RESTRICTED_CREDENTIALS": "$RESTRICTED_CREDENTIALS",
@@ -140,6 +139,7 @@ jobs:
     condition: succeededOrFailed()
     dependsOn:
       - Run_E2E_Tests
+      - Run_E2E_Tests_Cypress
     pool:
       vmImage: ubuntu-20.04
     steps:
