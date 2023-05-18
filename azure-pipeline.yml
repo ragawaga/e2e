@@ -155,12 +155,6 @@ jobs:
           inlineScript: |
             az storage blob upload-batch --account-name crutestreports --destination \$web/playwright --source "$(Pipeline.Workspace)/test-report/" --overwrite true
         condition: succeededOrFailed()
-      - task: InvokeRESTAPI@1
-        displayName: 'Invoke REST API: POST'
-        inputs:
-          serviceConnection: Slack
-          body: |
-            {
-              "text": "Daily test run complete. See https://automate.browserstack.com/dashboard/v2/ and https://crutestreports.z6.web.core.windows.net/playwright/index.html."
-            }
-          urlSuffix: /T0E13H4HL/B02MRCH8ZCG/b7JABFJAYnjFj0yOJxdG9Ehj
+      - script: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text": "Daily test run complete. See https://automate.browserstack.com/dashboard/v2/ and https://crutestreports.z6.web.core.windows.net/playwright/index.html."}'  https://hooks.slack.com/services/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
+
