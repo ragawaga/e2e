@@ -1,0 +1,9 @@
+name: Assign Pull Request reviewers
+on:
+  pull_request:
+    types: ["review_requested"]
+
+jobs:
+  assign-reviewers-invocation:
+    uses: digirati-co-uk/cru-releng/.github/workflows/pr-assign-reviewers.yml@feat/review-requests
+    secrets: inherit
