@@ -5,5 +5,6 @@ on:
 
 jobs:
   assign-reviewers-invocation:
+    if: github.event.requested_team != null
     uses: digirati-co-uk/cru-releng/.github/workflows/pr-assign-reviewers.yml@feat/review-requests
     secrets: inherit
