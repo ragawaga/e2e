@@ -27,7 +27,7 @@ class SlackReporter implements Reporter {
     this.client = new WebClient(options.token);
     this.channel = options.channel;
     this.notifiedUsers = options.notifiedUsers ?? [];
-    this.notifyOnlyOnFailure = true;
+    this.notifyOnlyOnFailure = options.notifyOnlyOnFailure ?? true;
   }
 
   onTestEnd(test: TestCase, result: TestResult): void {
@@ -38,6 +38,8 @@ class SlackReporter implements Reporter {
     if (!this.channel) {
       return;
     }
+
+    console.log(`Sending notification to ${this.channel}`);
 
     const messageBody = {
       text: "Test run completed",
@@ -54,6 +56,8 @@ class SlackReporter implements Reporter {
     const lastMessage = history.messages?.pop();
 
     if (lastMessage && lastMessage.bot_id === self.bot_id) {
+      console.info("Found existing message, updating in place");
+      
       await this.client.chat.update({
         ts: lastMessage.ts!,
         ...messageBody,
