@@ -1,5 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
-
+import { umbracoSessionFile, frontendSessionFile } from "./tests/auth";
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -7,7 +7,7 @@ import { defineConfig, devices } from "@playwright/test";
 export default defineConfig({
   testDir: "./tests",
   /* Maximum time one test can run for. */
-  timeout: 30 * 1000,
+  timeout: 30_000,
   expect: {
     /**
      * Maximum time expect() should wait for the condition to be met.
@@ -20,9 +20,9 @@ export default defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 1,
+  retries: 2,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : 4,
+  workers: 4,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     ["html", { outputFolder: "playwright-report" }],
@@ -31,12 +31,12 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
-    actionTimeout: 5000,
+    actionTimeout: 10_000,
     /* Base URL to use in actions like `await page.goto('/')`. */
     // baseURL: 'http://localhost:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: "off",
+    trace: "on-all-retries",
   },
 
   /* Configure projects for major browsers */
@@ -62,7 +62,7 @@ export default defineConfig({
       use: {
         ...devices["Desktop Chrome"],
         baseURL: "https://chw-web-dev.azurefd.net/",
-        trace: "on",
+        storageState: frontendSessionFile,
       },
       testDir: "./tests/frontend",
       dependencies: ["frontend-setup"],
@@ -73,7 +73,7 @@ export default defineConfig({
       use: {
         ...devices["Desktop Chrome"],
         baseURL: "https://crudev.northeurope.cloudapp.azure.com/",
-        trace: "on",
+        storageState: umbracoSessionFile,
       },
       testDir: "./tests/editor",
       dependencies: ["editor-setup"],

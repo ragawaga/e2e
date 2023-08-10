@@ -1,26 +1,25 @@
-import { expect, test } from "@playwright/test";
-import { asAuthenticatedUser } from "../auth";
+import { expect } from "@playwright/test";
+import { createTestFixture } from "../fixture";
+import { analysisStreamPageModel } from "./pages/AnalysisStreamPage";
 
-test.describe("a logged in user with full permissions", () => {
-  asAuthenticatedUser();
+const test = createTestFixture("analysis", analysisStreamPageModel);
 
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/analysis");
+test.describe("analysis stream", () => {
+  test.beforeEach(async ({ analysis }) => {
+    await analysis.load();
   });
 
-  test("can see the analysis page", async ({ context, page }) => {
-    const articleCounter = page.getByTestId("number-of-articles");
-    const articles = page.locator("article.chw-article-item");
-
+  test("has the correct title", async ({ page }) => {
     await expect(page).toHaveTitle(/Commodity Market Analysis/);
-    await expect(articleCounter).toBeVisible();
-    await expect(articles).toHaveCount(20);
   });
 
-  test("can click article titles through to a view page", async ({ page }) => {
-    const articleLink = page.getByTestId("article-item-heading-link").first();
-    await articleLink.click();
+  test("has the correct number of results", async ({ analysis }) => {
+    await expect(analysis.articleCounter).toBeVisible();
+    await expect(analysis.articles).toHaveCount(20);
+  });
 
+  test("links to the article viewer screen", async ({ analysis, page }) => {
+    await analysis.articleHeaders.first().click();
     await expect(page).toHaveURL(/article/);
   });
 });
