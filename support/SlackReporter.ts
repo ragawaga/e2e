@@ -49,11 +49,11 @@ class SlackReporter implements Reporter {
 
     // Let's check if the last message in this channel was from us, and we can simply update it instead.
     const self = await this.client.auth.test();
-    const channelList = await this.client.channels.list({
+    const channelList = await this.client.conversations.list({
       exclude_archived: true,
     });
 
-    const channelId = channelList.channels
+    const channelId = channelList.channels!
       .filter((channel) => channel.name === this.channel)
       .pop();
 
