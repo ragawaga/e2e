@@ -23,7 +23,6 @@ test.describe("CRUspi Tests", () => {
   test("Navigate to CRUspi prices page", async ({ page }) => {
     const navTo = `/prices/cruspi`;
     await page.goto(navTo);
-    await expect(cy.url()).contain(navTo);
 
     //Check navgating via the Prices Menu works (had issues in the past where CRUspi disappeared from the menu)
     await page.goto("/analysis");

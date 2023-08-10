@@ -11,5 +11,10 @@ test.describe("a logged in user", () => {
 
       await expect(valueElement).toBeVisible();
     }
+
+    await page.getByTestId('tab-change-password').click();
+    await page.getByTestId('input-oldPassword').click();
+    await page.getByTestId('input-newPassword').click();
+    await page.getByText('Minimum length of 12 characters').click();
   });
 });

@@ -36,7 +36,7 @@ test.describe("FAQ Screen", () => {
     ).not.visible();
 
     //Expand the first accordian, and check that there is text within the accordian
-    page.locator(_data_testid_accordion_heading_).first().click();
+    await page.locator(_data_testid_accordion_heading_).first().click();
     await expect(
       page.locator(_accordion_panel_raa_0_chw_helpstream_question_content_p),
     ).visible();

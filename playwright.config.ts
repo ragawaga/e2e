@@ -1,8 +1,18 @@
 import { defineConfig, devices } from "@playwright/test";
 import { umbracoSessionFile, frontendSessionFile } from "./tests/auth";
+import dotenv from "dotenv";
+import dotenvExpand from "dotenv-expand";
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
+
+const environment = process.env.PLAYWRIGHT_ENVIRONMENT ?? 'dev';
+const environmentLocalConfig = dotenv.config({path: `.env.${environment}.local`})
+dotenvExpand.expand(environmentLocalConfig);
+
+const environmentConfig = dotenv.config({ path: `.env.${environment}` });
+dotenvExpand.expand(environmentConfig);
 
 export default defineConfig({
   testDir: "./tests",
