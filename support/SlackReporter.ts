@@ -32,7 +32,7 @@ class SlackReporter implements Reporter {
       return;
     }
 
-    this.client.chat.postMessage({
+    await this.client.chat.postMessage({
       text: "Test run completed",
       channel: this.channel,
       ...createMessageBlock(result, Object.values(this.tests)),
