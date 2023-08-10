@@ -34,6 +34,15 @@ jobs:
         deploy:
           steps:
             - checkout: self
+            - task: DownloadSecureFile@1
+              name: environmentConfiguration
+              displayName: Download environment configuration
+              inputs:
+                secureFile: '.env.dev.local'
+            - script: |
+                echo Installing $(environmentConfiguration.secureFilePath) to current folder...
+                mv "$(environmentConfiguration.secureFilePath)" .
+              displayName: Setup environment configuration
             - task: Bash@3
               displayName: Run Playwright tests
               env:
