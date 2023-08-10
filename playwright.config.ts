@@ -43,16 +43,16 @@ export default defineConfig({
   projects: [
     {
       name: "frontend-setup",
-      testMatch: /.*\.setup\.ts/,
-      testDir: "./tests/frontend",
+      testMatch: /frontend\.setup\.ts/,
+      testDir: "./tests/setup",
       use: {
         baseURL: "https://chw-web-dev.azurefd.net/",
       },
     },
     {
       name: "editor-setup",
-      testMatch: /.*\.setup\.ts/,
-      testDir: "./tests/editor",
+      testMatch: /editor\.setup\.ts/,
+      testDir: "./tests/setup",
       use: {
         baseURL: "https://crudev.northeurope.cloudapp.azure.com/",
       },
