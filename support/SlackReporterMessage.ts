@@ -1,7 +1,6 @@
 import type { FullResult, TestCase } from "@playwright/test/reporter";
 import {
   ChatPostMessageArguments,
-  SectionBlock,
   KnownBlock,
   Block,
 } from "@slack/web-api";
@@ -45,15 +44,16 @@ export function createMessageBlock(
   const passing = tests.filter((r) => r.ok());
   const failing = tests.filter((r) => !r.ok());
 
-  const admonitions = { passed: ":checkmark:", failed: ":warning:" };
+  const admonitions = { passed: ":white_check_mark:", failed: ":warning:" };
   const admonition = admonitions[result.status];
+  const date = new Date();
 
   const blocks: (Block | KnownBlock)[] = [
     {
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `*Test Run ${result.status}* on *dev* ${admonition}`,
+        text: `*Test Run ${result.status}* on *dev* at ${date.getHours()}:${date.getMinutes()} ${admonition}`,
       },
       accessory: {
         type: "button",
@@ -84,8 +84,12 @@ export function createMessageBlock(
       ],
     },
     {
-      type: "divider",
-    },
+      type: "section",
+      text: {
+        type: "mrkdwn",
+        text: "*<https://crutestreports.z6.web.core.windows.net/playwright/index.html|See test results>*",
+      },
+    }
   ];
 
   if (failing.length > 0) {
@@ -94,6 +98,9 @@ export function createMessageBlock(
       .flatMap((test) => createTestFailureBlock(test));
 
     const failureSummary: (Block | KnownBlock)[] = [
+      {
+        type: "divider",
+      },
       {
         type: "section",
         text: {
@@ -106,14 +113,6 @@ export function createMessageBlock(
 
     blocks.push(...failureSummary);
   }
-
-  blocks.push({
-    type: "section",
-    text: {
-      type: "mrkdwn",
-      text: "*<https://crutestreports.z6.web.core.windows.net/playwright/index.html|See more test results>*",
-    },
-  });
 
   return {
     blocks,
