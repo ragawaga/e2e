@@ -56,7 +56,7 @@ test.describe("Search bar search", () => {
       "My Documents",
     ]);
 
-    await expect(page.locator(_chw_article_item)).toHaveLength(
+    await expect(page.locator(_chw_article_item)).toHaveCount(
       expectedPageSize
     );
   });
@@ -73,7 +73,7 @@ test.describe("Search bar search", () => {
     );
     await expect(page.locator(_chw_tab_button_title)).toBeAttached();
     await expect(page.locator(_chw_searchlist_count)).toContainText("(0)");
-    await expect(page.locator(_chw_article_item)).toHaveLength(
+    await expect(page.locator(_chw_article_item)).toHaveCount(
       expectedPageSize
     );
   });
