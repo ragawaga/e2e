@@ -19,7 +19,7 @@ parameters:
     default: chw-web-dev.azurefd.net
 
 variables:
-  YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
+  - group: cru-e2e-test-vars
 
 trigger: none
 
@@ -47,6 +47,8 @@ jobs:
               displayName: Run Playwright tests
               env:
                 CI: true
+                SLACK_TOKEN: $(SLACK_TOKEN)
+                SLACK_CHANNEL: $(SLACK_CHANNEL)
               inputs:
                 targetType: inline
                 failOnStderr: false

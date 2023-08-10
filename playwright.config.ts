@@ -1,19 +1,39 @@
-import { defineConfig, devices } from "@playwright/test";
+import { PlaywrightTestConfig, defineConfig, devices } from "@playwright/test";
 import { umbracoSessionFile, frontendSessionFile } from "./tests/auth";
 import dotenv from "dotenv";
 import dotenvExpand from "dotenv-expand";
 
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
+const environment = process.env.PLAYWRIGHT_ENVIRONMENT ?? "dev";
 
-const environment = process.env.PLAYWRIGHT_ENVIRONMENT ?? 'dev';
-const environmentLocalConfig = dotenv.config({path: `.env.${environment}.local`})
-dotenvExpand.expand(environmentLocalConfig);
+const localConfig = dotenv.config({path: `.env.${environment}.local`});
+dotenvExpand.expand(localConfig);
 
 const environmentConfig = dotenv.config({ path: `.env.${environment}` });
 dotenvExpand.expand(environmentConfig);
 
+const reporters: PlaywrightTestConfig["reporter"] = [
+  ["html", { outputFolder: "playwright-report" }],
+  ["junit", { outputFile: "test-results/e2e-junit-results.xml" }],
+];
+
+if (process.env.CI) {
+  reporters.push(
+    [
+      "./support/SlackReporter.ts",
+      {
+        token: process.env.SLACK_TOKEN,
+        channel: process.env.SLACK_CHANNEL,
+      },
+    ],
+    ["github"]
+  );
+} else {
+  reporters.push(["list"]);
+}
+
+/**
+ * See https://playwright.dev/docs/test-configuration.
+ */
 export default defineConfig({
   testDir: "./tests",
   /* Maximum time one test can run for. */
@@ -23,28 +43,24 @@ export default defineConfig({
      * Maximum time expect() should wait for the condition to be met.
      * For example in `await expect(locator).toHaveText();`
      */
+
     timeout: 5000,
   },
-  /* Run tests in files in parallel */
   fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
   retries: 2,
   /* Opt out of parallel tests on CI. */
-  workers: 4,
+  workers: process.env.CI ? "100%" : "50%",
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [
-    ["html", { outputFolder: "playwright-report" }],
-    ["junit", { outputFile: "test-results/e2e-junit-results.xml" }],
-  ],
+  reporter: reporters,
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
     actionTimeout: 10_000,
     /* Base URL to use in actions like `await page.goto('/')`. */
     // baseURL: 'http://localhost:3000',
-
+    screenshot: "only-on-failure",
+    video: "off",
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-all-retries",
   },
