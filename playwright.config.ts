@@ -5,7 +5,7 @@ import dotenvExpand from "dotenv-expand";
 
 const environment = process.env.PLAYWRIGHT_ENVIRONMENT ?? "dev";
 
-const localConfig = dotenv.config({path: `.env.${environment}.local`});
+const localConfig = dotenv.config({ path: `.env.${environment}.local` });
 dotenvExpand.expand(localConfig);
 
 const environmentConfig = dotenv.config({ path: `.env.${environment}` });
@@ -25,7 +25,7 @@ if (process.env.CI) {
         channel: process.env.SLACK_CHANNEL,
       },
     ],
-    ["github"]
+    ["dot"]
   );
 } else {
   reporters.push(["list"]);
