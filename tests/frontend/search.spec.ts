@@ -1,5 +1,4 @@
 import { Page, expect, test } from "@playwright/test";
-import { asAuthenticatedUser } from "../../../tests/auth";
 
 const _data_testid_search_input_ = '[data-testid="search-input"]';
 const _data_testid_search_button_ = '[data-testid="search-button"]';
