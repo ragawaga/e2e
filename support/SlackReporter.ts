@@ -49,15 +49,23 @@ class SlackReporter implements Reporter {
 
     // Let's check if the last message in this channel was from us, and we can simply update it instead.
     const self = await this.client.auth.test();
+    const channelList = await this.client.channels.list({
+      exclude_archived: true,
+    });
+
+    const channelId = channelList.channels
+      .filter((channel) => channel.name === this.channel)
+      .pop();
+
     const history = await this.client.conversations.history({
-      channel: this.channel,
+      channel: channelId,
     });
 
     const lastMessage = history.messages?.pop();
 
     if (lastMessage && lastMessage.bot_id === self.bot_id) {
       console.info("Found existing message, updating in place");
-      
+
       await this.client.chat.update({
         ts: lastMessage.ts!,
         ...messageBody,
@@ -80,7 +88,7 @@ class SlackReporter implements Reporter {
         }
 
         await this.client.chat.postEphemeral({
-          channel: this.channel,
+          channel: channelId,
           text: "New test results are available",
           user: userResponse.user?.id!,
         });
