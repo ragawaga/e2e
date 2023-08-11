@@ -81,7 +81,7 @@ class SlackReporter implements Reporter {
 
         await this.client.chat.postEphemeral({
           channel: this.channel,
-          text: "New test results are available",
+          text: "New test results are available @here",
           user: userResponse.user?.id!,
         });
       }
