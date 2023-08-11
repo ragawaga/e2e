@@ -58,7 +58,7 @@ class SlackReporter implements Reporter {
       .pop();
 
     const history = await this.client.conversations.history({
-      channel: channelId,
+      channel: channelId?.id,
     });
 
     const lastMessage = history.messages?.pop();
