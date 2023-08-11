@@ -5,13 +5,6 @@ schedules:
       include:
         - develop
 
-resources:
-  repositories:
-    - repository: cypress-tests
-      type: github
-      name: digirati-co-uk/cru-headless-web
-      endpoint: digirati-co-uk
-
 parameters:
   - name: hostname
     displayName: Hostname of enhancements platform
