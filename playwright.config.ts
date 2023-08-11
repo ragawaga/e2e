@@ -74,7 +74,7 @@ export default defineConfig({
       testMatch: /frontend\.setup\.ts/,
       testDir: "./tests/setup",
       use: {
-        baseURL: "https://chw-web-dev.azurefd.net/",
+        baseURL: process.env.FRONTEND_BASE_URL,
       },
     },
     {
@@ -82,14 +82,14 @@ export default defineConfig({
       testMatch: /editor\.setup\.ts/,
       testDir: "./tests/setup",
       use: {
-        baseURL: "https://crudev.northeurope.cloudapp.azure.com/",
+        baseURL: process.env.UMBRACO_BASE_URL,
       },
     },
     {
       name: "frontend",
       use: {
         ...devices["Desktop Chrome"],
-        baseURL: "https://chw-web-dev.azurefd.net/",
+        baseURL: process.env.FRONTEND_BASE_URL,
         storageState: frontendSessionFile,
       },
       testDir: "./tests/frontend",
@@ -100,7 +100,7 @@ export default defineConfig({
       name: "editor",
       use: {
         ...devices["Desktop Chrome"],
-        baseURL: "https://crudev.northeurope.cloudapp.azure.com/",
+        baseURL: process.env.UMBRACO_BASE_URL,
         storageState: umbracoSessionFile,
       },
       testDir: "./tests/editor",

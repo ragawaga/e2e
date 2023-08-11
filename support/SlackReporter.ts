@@ -50,10 +50,10 @@ class SlackReporter implements Reporter {
     // Let's check if the last message in this channel was from us, and we can simply update it instead.
     const self = await this.client.auth.test();
     const history = await this.client.conversations.history({
-      channel: "C05MMR1UXND"
+      channel: this.channel
     });
 
-    const lastMessage = history.messages?.pop();
+    const lastMessage = history.messages?.filter(message => message.type).shift()
 
     if (lastMessage && lastMessage.bot_id === self.bot_id) {
       console.info("Found existing message, updating in place");
