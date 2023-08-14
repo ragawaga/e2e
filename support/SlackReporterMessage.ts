@@ -30,7 +30,7 @@ export function createTestFailureBlock(test: TestCase): (Block | KnownBlock)[] {
         },
         {
           type: "mrkdwn",
-          text: `<https://crutestreports.z6.web.core.windows.net/playwright/index.html#?testId=${test.id}|See test result>`,
+          text: `<https://crutestreports.z6.web.core.windows.net/playwright-${process.env.PLAYWRIGHT_ENVIRONMENT}/index.html#?testId=${test.id}|See test result>`,
         },
       ],
     },
@@ -87,7 +87,7 @@ export function createMessageBlock(
       type: "section",
       text: {
         type: "mrkdwn",
-        text: "*<https://crutestreports.z6.web.core.windows.net/playwright/index.html|See test results>*",
+        text: `*<https://crutestreports.z6.web.core.windows.net/playwright-${process.env.PLAYWRIGHT_ENVIRONMENT}/index.html|See test results>*`,
       },
     }
   ];

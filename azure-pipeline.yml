@@ -6,10 +6,15 @@ schedules:
         - develop
 
 parameters:
-  - name: hostname
-    displayName: Hostname of enhancements platform
+  - name: environment
+    displayName: Environment to run tests against
     type: string
-    default: chw-web-dev.azurefd.net
+    default: dev
+    values:
+      - dev
+      - uat4
+      - uat5
+      - prod
 
 variables:
   - group: cru-e2e-test-vars
@@ -31,7 +36,7 @@ jobs:
               name: environmentConfiguration
               displayName: Download environment configuration
               inputs:
-                secureFile: '.env.dev.local'
+                secureFile: '.env.${{ parameters.env}}.local'
             - script: |
                 echo Installing $(environmentConfiguration.secureFilePath) to current folder...
                 mv "$(environmentConfiguration.secureFilePath)" .
@@ -42,6 +47,7 @@ jobs:
                 CI: true
                 SLACK_TOKEN: $(SLACK_TOKEN)
                 SLACK_CHANNEL: $(SLACK_CHANNEL)
+                PLAYWRIGHT_ENVIRONMENT: ${{ parameters.environment }}
               inputs:
                 targetType: inline
                 failOnStderr: false
@@ -79,5 +85,5 @@ jobs:
           scriptType: bash
           scriptLocation: inlineScript
           inlineScript: |
-            az storage blob upload-batch --account-name crutestreports --destination \$web/playwright --source "$(Pipeline.Workspace)/test-report/" --overwrite true
+            az storage blob upload-batch --account-name crutestreports --destination \$web/playwright-${{ parameters.env }} --source "$(Pipeline.Workspace)/test-report/" --overwrite true
         condition: succeededOrFailed()

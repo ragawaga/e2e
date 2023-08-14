@@ -5,8 +5,9 @@ import type {
   TestResult,
 } from "@playwright/test/reporter";
 
-import { WebClient } from "@slack/web-api";
+import { ChatPostMessageArguments, WebClient } from "@slack/web-api";
 import { createMessageBlock } from "./SlackReporterMessage";
+import { Message } from "@slack/web-api/dist/response/ChatPostMessageResponse";
 
 export type SlackReporterOptions = {
   token?: string;
@@ -34,6 +35,36 @@ class SlackReporter implements Reporter {
     this.tests[test.id] = test;
   }
 
+  async createOrUpdateMessage(channel: string, body: Partial<ChatPostMessageArguments>) : Promise<Message> {
+    const self = await this.client.auth.test();
+    const history = await this.client.conversations.history({
+      channel,
+    });
+
+    const lastMessage = history.messages
+      ?.filter((message) => message.type)
+      .shift();
+
+    if (lastMessage && lastMessage.bot_id === self.bot_id) {
+      console.info("Found existing message, updating in place");
+
+      const response = await this.client.chat.update({
+        channel,
+        ts: lastMessage.ts!,
+        ...body,
+      });
+
+      return response.message!;
+    } else {
+      const response = await this.client.chat.postMessage({
+        channel,
+        ...body
+      });
+
+      return response.message!;
+    }
+  }
+
   async onEnd(result: FullResult) {
     if (!this.channel) {
       return;
@@ -43,48 +74,32 @@ class SlackReporter implements Reporter {
 
     const messageBody = {
       text: "Test run completed",
-      channel: this.channel,
       ...createMessageBlock(result, Object.values(this.tests)),
     };
 
-    // Let's check if the last message in this channel was from us, and we can simply update it instead.
-    const self = await this.client.auth.test();
-    const history = await this.client.conversations.history({
-      channel: this.channel
-    });
-
-    const lastMessage = history.messages?.filter(message => message.type).shift()
-
-    if (lastMessage && lastMessage.bot_id === self.bot_id) {
-      console.info("Found existing message, updating in place");
-
-      await this.client.chat.update({
-        ts: lastMessage.ts!,
-        ...messageBody,
-      });
-    } else {
-      await this.client.chat.postMessage(messageBody);
-    }
+    const message = await this.createOrUpdateMessage(this.channel, messageBody);
 
     if (result.status === "failed" || !this.notifyOnlyOnFailure) {
-      for (const user of this.notifiedUsers) {
-        const userResponse = await this.client.users.lookupByEmail({
-          email: user,
+      const userIds = this.notifiedUsers.map(async (email: string) => {
+        const response = await this.client.users.lookupByEmail({
+          email,
         });
 
-        if (!userResponse.ok) {
-          console.log(
-            `Skipping notification to user ${user}, unable to lookup e-mail due to '${userResponse.error}'`
-          );
-          continue;
+        if (!response.ok) {
+          console.log(`Failed to resolve user ${email}`);
+          return null;
         }
 
-        await this.client.chat.postEphemeral({
-          channel: this.channel,
-          text: "New test results are available @here",
-          user: userResponse.user?.id!,
-        });
-      }
+        return `<@${response.user?.id}>`;
+      })
+      .filter(value => value !== null)
+      .join(", ");
+
+      await this.client.chat.postMessage({
+        channel: this.channel,
+        thread_ts: message.ts,
+        text: `New test results are available, notifying ${userIds}`,
+      });
     }
   }
 }
