@@ -1,4 +1,4 @@
-describe('Senior Tester E2E Exercise', () => {
+describe('Verify world service page title', () => {
   //Store the test data in an array due to small size of dataset
   //Considerations for future : switch to an external file for management of the dataset
   const services = [
