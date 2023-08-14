@@ -38,7 +38,7 @@ class SlackReporter implements Reporter {
   async createOrUpdateMessage(
     channel: string,
     body: Partial<ChatPostMessageArguments>
-  ): Promise<Message> {
+  ): Promise<string> {
     const self = await this.client.auth.test();
     const history = await this.client.conversations.history({
       channel,
@@ -55,14 +55,14 @@ class SlackReporter implements Reporter {
         ...body,
       });
 
-      return response.message!;
+      return lastMessage.ts!;
     } else {
       const response = await this.client.chat.postMessage({
         channel,
         ...body,
       });
 
-      return response.message!;
+      return response.message?.ts!;
     }
   }
 
@@ -79,11 +79,14 @@ class SlackReporter implements Reporter {
     };
 
     const message = await this.createOrUpdateMessage(this.channel, messageBody);
+    if (!message) {
+      console.warn("Slack message had no timestamp");
+    }
 
     if (result.status === "failed" || !this.notifyOnlyOnFailure) {
       await this.client.chat.postMessage({
         channel: this.channel,
-        thread_ts: message.ts,
+        thread_ts: message,
         reply_broadcast: false,
         text: `New test results are available, notifying ${this.notifiedUsers
           .map((id) => `<@${id}>`)

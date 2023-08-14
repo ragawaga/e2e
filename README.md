@@ -37,6 +37,11 @@ This will open an embedded Chromium instance containing the Playwright trace vie
 
 To install the vscode extension, enter this command into the command palette (Ctrl+P): `ext install ms-playwright.playwright`. Playwright tests should now appear under the `Testing` sidebar.
 
+
+## Getting notified
+
+The test suite will report its results to Slack on every run. This helps with visibility into test failures and ensuring we're paying proper attention to them. To make sure we're not delivering low signal-to-noise with these notifications there is an option to only be notified when the tests are failing. The results will be posted regardless.
+
 ## References
 
 Official Playwright documentation: <https://playwright.dev/docs/intro>
