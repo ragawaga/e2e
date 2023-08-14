@@ -9,16 +9,18 @@ Requirements
 3.	Please write your code as efficiently as possible.
 4.	If one Service’s test fails, the other Services’ tests must still be executed.
 5.	There is a requirement that these test(s) should be usable in other testsuites. Please account for this when creating your test(s).
+
 Data
 The data we would like you to iterate over is as follows:
+
 Service - Igbo
 Address -https://bbc.com/igbo
 Title–“Ogbako - BBC News Ìgbò”
+
 Service - Hausa
 Address -https://bbc.com/hausa
 Title –“Labaran Duniya - BBC News Hausa”
+
 Service - Pidgin
 Address -https://bbc.com/pidgin
 Title–“Domot - BBC News Pidgin”
-
-
