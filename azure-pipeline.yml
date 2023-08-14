@@ -36,7 +36,7 @@ jobs:
               name: environmentConfiguration
               displayName: Download environment configuration
               inputs:
-                secureFile: '.env.${{ parameters.env}}.local'
+                secureFile: '.env.${{ parameters.environment }}.local'
             - script: |
                 echo Installing $(environmentConfiguration.secureFilePath) to current folder...
                 mv "$(environmentConfiguration.secureFilePath)" .
@@ -85,5 +85,5 @@ jobs:
           scriptType: bash
           scriptLocation: inlineScript
           inlineScript: |
-            az storage blob upload-batch --account-name crutestreports --destination \$web/playwright-${{ parameters.env }} --source "$(Pipeline.Workspace)/test-report/" --overwrite true
+            az storage blob upload-batch --account-name crutestreports --destination \$web/playwright-${{ parameters.environment }} --source "$(Pipeline.Workspace)/test-report/" --overwrite true
         condition: succeededOrFailed()
