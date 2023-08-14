@@ -7,7 +7,6 @@ import type {
 
 import { ChatPostMessageArguments, WebClient } from "@slack/web-api";
 import { createMessageBlock } from "./SlackReporterMessage";
-import { Message } from "@slack/web-api/dist/response/ChatPostMessageResponse";
 
 export type SlackReporterOptions = {
   token?: string;
@@ -40,13 +39,17 @@ class SlackReporter implements Reporter {
     body: Partial<ChatPostMessageArguments>
   ): Promise<string> {
     const self = await this.client.auth.test();
+    if (!self.bot_id) {
+      throw new Error("Not a bot token");
+    }
+
     const history = await this.client.conversations.history({
       channel,
     });
 
     const lastMessage = history.messages?.shift();
 
-    if (lastMessage && lastMessage.bot_id === self.bot_id) {
+    if (lastMessage?.bot_id === self.bot_id) {
       console.info("Found existing message, updating in place");
 
       const response = await this.client.chat.update({
@@ -81,6 +84,7 @@ class SlackReporter implements Reporter {
     const message = await this.createOrUpdateMessage(this.channel, messageBody);
     if (!message) {
       console.warn("Slack message had no timestamp");
+      return;
     }
 
     if (result.status === "failed" || !this.notifyOnlyOnFailure) {
