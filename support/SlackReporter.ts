@@ -80,25 +80,26 @@ class SlackReporter implements Reporter {
     const message = await this.createOrUpdateMessage(this.channel, messageBody);
 
     if (result.status === "failed" || !this.notifyOnlyOnFailure) {
-      const userIds = this.notifiedUsers.map(async (email: string) => {
+      const userIds : string[] = [];
+
+      for (const email in this.notifiedUsers) {
         const response = await this.client.users.lookupByEmail({
           email,
         });
 
         if (!response.ok) {
           console.log(`Failed to resolve user ${email}`);
-          return null;
+          continue;
         }
 
-        return `<@${response.user?.id}>`;
-      })
-      .filter(value => value !== null)
-      .join(", ");
-
+        userIds.push(`<@${response.user?.id}>`);
+      }
+      
       await this.client.chat.postMessage({
         channel: this.channel,
         thread_ts: message.ts,
-        text: `New test results are available, notifying ${userIds}`,
+        reply_broadcast: false,
+        text: `New test results are available, notifying ${userIds.join(", ")}`,
       });
     }
   }
