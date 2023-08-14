@@ -35,15 +35,16 @@ class SlackReporter implements Reporter {
     this.tests[test.id] = test;
   }
 
-  async createOrUpdateMessage(channel: string, body: Partial<ChatPostMessageArguments>) : Promise<Message> {
+  async createOrUpdateMessage(
+    channel: string,
+    body: Partial<ChatPostMessageArguments>
+  ): Promise<Message> {
     const self = await this.client.auth.test();
     const history = await this.client.conversations.history({
       channel,
     });
 
-    const lastMessage = history.messages
-      ?.filter((message) => message.type)
-      .shift();
+    const lastMessage = history.messages?.shift();
 
     if (lastMessage && lastMessage.bot_id === self.bot_id) {
       console.info("Found existing message, updating in place");
@@ -58,7 +59,7 @@ class SlackReporter implements Reporter {
     } else {
       const response = await this.client.chat.postMessage({
         channel,
-        ...body
+        ...body,
       });
 
       return response.message!;
@@ -80,26 +81,13 @@ class SlackReporter implements Reporter {
     const message = await this.createOrUpdateMessage(this.channel, messageBody);
 
     if (result.status === "failed" || !this.notifyOnlyOnFailure) {
-      const userIds : string[] = [];
-
-      for (const email in this.notifiedUsers) {
-        const response = await this.client.users.lookupByEmail({
-          email,
-        });
-
-        if (!response.ok) {
-          console.log(`Failed to resolve user ${email}`);
-          continue;
-        }
-
-        userIds.push(`<@${response.user?.id}>`);
-      }
-      
       await this.client.chat.postMessage({
         channel: this.channel,
         thread_ts: message.ts,
         reply_broadcast: false,
-        text: `New test results are available, notifying ${userIds.join(", ")}`,
+        text: `New test results are available, notifying ${this.notifiedUsers
+          .map((id) => `<@${id}>`)
+          .join(", ")}`,
       });
     }
   }

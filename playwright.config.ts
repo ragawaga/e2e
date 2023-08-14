@@ -23,7 +23,7 @@ if (process.env.CI) {
       {
         token: process.env.SLACK_TOKEN,
         channel: process.env.SLACK_CHANNEL,
-        notifiedUsers: ['gary.tierney@digirati.com'],
+        notifiedUsers: [/* garytierney */ "U5YN0B43S"],
         notifyOnlyOnFailure: false,
       },
     ],
