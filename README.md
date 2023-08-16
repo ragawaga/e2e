@@ -4,7 +4,7 @@
 
 - `yarn install`
 - `yarn run playwright install`
-- `yarn test`
+- `yarn run playwright test`
 
 ## Configuring environments and credentials
 
