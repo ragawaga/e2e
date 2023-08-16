@@ -5,116 +5,49 @@ schedules:
       include:
         - develop
 
-resources:
-  repositories:
-    - repository: cypress-tests
-      type: github
-      name: digirati-co-uk/cru-headless-web
-      endpoint: digirati-co-uk
-
 parameters:
-  - name: hostname
-    displayName: Hostname of enhancements platform
+  - name: environment
+    displayName: Environment to run tests against
     type: string
-    default: chw-web-dev.azurefd.net
+    default: dev
+    values:
+      - dev
+      - uat4
+      - uat5
+      - prod
 
 variables:
-  YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
+  - group: cru-e2e-test-vars
 
 trigger: none
 
 jobs:
-  - job: Run_E2E_Tests_Cypress
-    pool:
-      vmImage: ubuntu-20.04
-    steps:
-      - checkout: self
-      - checkout: cypress-tests
-      - task: NodeTool@0
-        displayName: 'Use Node 16.x'
-        inputs:
-          versionSpec: 16.x
-          checkLatest: true
-      - script: |
-          cat > cypress.env.json <<EOF
-          {
-              "LOGIN_SCREEN__GOOD_CREDENTIALS": "$GOOD_CREDENTIALS",
-              "LOGIN_SCREEN__RESTRICTED_CREDENTIALS": "$RESTRICTED_CREDENTIALS",
-              "AUTH0_CLIENT_ID": "BWG0CCiq8OououIxhPEAH7wtNT3kt797",
-              "AUTH0_CLIENT_SECRET": "$AUTH0_CLIENT_SECRET",
-              "AUTH0_ENDPOINT": "https://auth.dev.crugroup.com/oauth/token"
-          }
-          EOF
-          BUILD_NAME=$(date +"%Y-%m-%d")
-          cat > browserstack.json <<EOF
-          {
-              "auth": {
-                  "username": "garytierney1",
-                  "access_key": "$BROWSERSTACK_TOKEN"
-              },
-              "browsers": [
-                  {
-                      "browser": "chrome",
-                      "os": "Windows 10",
-                      "versions": [
-                          "latest",
-                          "latest-1"
-                      ]
-                  },
-                  {
-                      "browser": "edge",
-                      "os": "Windows 10",
-                      "versions": [
-                          "latest",
-                          "latest-1"
-                      ]
-                  }
-              ],
-              "run_settings": {
-                  "cypress_config_file": "cypress.json",
-                  "project_name": "CRU Enhancements - Nightly",
-                  "build_name": "$BUILD_NAME",
-                  "exclude": [],
-                  "parallels": "1",
-                  "npm_dependencies": {
-                      "cypress-mochawesome-reporter": "^2.3.0",
-                      "cypress-multi-reporters": "^1.5.0",
-                      "typescript": "^4.1.2"
-                  },
-                  "package_config_options": {},
-                  "headless": true
-              },
-              "connection_settings": {
-                  "local": false,
-                  "local_identifier": null,
-                  "local_mode": null,
-                  "local_config_file": null
-              },
-              "disable_usage_reporting": false
-          }
-          EOF
-          npx browserstack-cypress-cli run
-        env:
-          AUTH0_CLIENT_SECRET: $(Auth0ClientSecret)
-          GOOD_CREDENTIALS: $(GoodCredentials)
-          RESTRICTED_CREDENTIALS: $(RestrictedCredentials)
-          BROWSERSTACK_TOKEN: $(BrowserstackToken)
-        workingDirectory: cru-headless-web
-
   - deployment: Run_E2E_Tests
     pool:
       vmImage: ubuntu-20.04
-    container: 'mcr.microsoft.com/playwright:v1.31.0-focal'
+    container: 'mcr.microsoft.com/playwright:v1.36.2-focal'
     environment: test
     strategy:
       runOnce:
         deploy:
           steps:
             - checkout: self
+            - task: DownloadSecureFile@1
+              name: environmentConfiguration
+              displayName: Download environment configuration
+              inputs:
+                secureFile: '.env.${{ parameters.environment }}.local'
+            - script: |
+                echo Installing $(environmentConfiguration.secureFilePath) to current folder...
+                mv "$(environmentConfiguration.secureFilePath)" .
+              displayName: Setup environment configuration
             - task: Bash@3
               displayName: Run Playwright tests
               env:
                 CI: true
+                SLACK_TOKEN: $(SLACK_TOKEN)
+                SLACK_CHANNEL: $(SLACK_CHANNEL)
+                PLAYWRIGHT_ENVIRONMENT: ${{ parameters.environment }}
               inputs:
                 targetType: inline
                 failOnStderr: false
@@ -139,7 +72,6 @@ jobs:
     condition: always()
     dependsOn:
       - Run_E2E_Tests
-      - Run_E2E_Tests_Cypress
     pool:
       vmImage: ubuntu-20.04
     steps:
@@ -153,8 +85,5 @@ jobs:
           scriptType: bash
           scriptLocation: inlineScript
           inlineScript: |
-            az storage blob upload-batch --account-name crutestreports --destination \$web/playwright --source "$(Pipeline.Workspace)/test-report/" --overwrite true
+            az storage blob upload-batch --account-name crutestreports --destination \$web/playwright-${{ parameters.environment }} --source "$(Pipeline.Workspace)/test-report/" --overwrite true
         condition: succeededOrFailed()
-      - script: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text": "Daily test run complete. See https://automate.browserstack.com/dashboard/v2/ and https://crutestreports.z6.web.core.windows.net/playwright/index.html."}'  https://hooks.slack.com/services/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
-

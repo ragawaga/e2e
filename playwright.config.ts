@@ -1,68 +1,96 @@
-import { defineConfig, devices } from "@playwright/test";
+import { PlaywrightTestConfig, defineConfig, devices } from "@playwright/test";
+import { umbracoSessionFile, frontendSessionFile } from "./tests/auth";
+import dotenv from "dotenv";
+import dotenvExpand from "dotenv-expand";
+
+const environment = process.env.PLAYWRIGHT_ENVIRONMENT ?? "dev";
+
+const localConfig = dotenv.config({ path: `.env.${environment}.local` });
+dotenvExpand.expand(localConfig);
+
+const environmentConfig = dotenv.config({ path: `.env.${environment}` });
+dotenvExpand.expand(environmentConfig);
+
+const reporters: PlaywrightTestConfig["reporter"] = [
+  ["html", { outputFolder: "playwright-report" }],
+  ["junit", { outputFile: "test-results/e2e-junit-results.xml" }],
+];
+
+if (process.env.CI) {
+  reporters.push(
+    [
+      "./support/SlackReporter.ts",
+      {
+        token: process.env.SLACK_TOKEN,
+        channel: process.env.SLACK_CHANNEL,
+        notifiedUsers: [/* garytierney */ "U5YN0B43S"],
+        notifyOnlyOnFailure: false,
+      },
+    ],
+    ["dot"]
+  );
+} else {
+  reporters.push(["list"]);
+}
 
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
-
 export default defineConfig({
   testDir: "./tests",
   /* Maximum time one test can run for. */
-  timeout: 30 * 1000,
+  timeout: 30_000,
   expect: {
     /**
      * Maximum time expect() should wait for the condition to be met.
      * For example in `await expect(locator).toHaveText();`
      */
+
     timeout: 5000,
   },
-  /* Run tests in files in parallel */
   fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
-  retries: process.env.CI ? 2 : 1,
+  retries: 2,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : 4,
+  workers: process.env.CI ? "100%" : "50%",
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [
-    ["html", { outputFolder: "playwright-report" }],
-    ["junit", { outputFile: "test-results/e2e-junit-results.xml" }],
-  ],
+  reporter: reporters,
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
-    actionTimeout: 5000,
+    actionTimeout: 10_000,
     /* Base URL to use in actions like `await page.goto('/')`. */
     // baseURL: 'http://localhost:3000',
-
+    screenshot: "only-on-failure",
+    video: "off",
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: "off",
+    trace: "on-all-retries",
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
       name: "frontend-setup",
-      testMatch: /.*\.setup\.ts/,
-      testDir: "./tests/frontend",
+      testMatch: /frontend\.setup\.ts/,
+      testDir: "./tests/setup",
       use: {
-        baseURL: "https://chw-web-dev.azurefd.net/",
+        baseURL: process.env.FRONTEND_BASE_URL,
       },
     },
     {
       name: "editor-setup",
-      testMatch: /.*\.setup\.ts/,
-      testDir: "./tests/editor",
+      testMatch: /editor\.setup\.ts/,
+      testDir: "./tests/setup",
       use: {
-        baseURL: "https://crudev.northeurope.cloudapp.azure.com/",
+        baseURL: process.env.UMBRACO_BASE_URL,
       },
     },
     {
       name: "frontend",
       use: {
         ...devices["Desktop Chrome"],
-        baseURL: "https://chw-web-dev.azurefd.net/",
-        trace: "on",
+        baseURL: process.env.FRONTEND_BASE_URL,
+        storageState: frontendSessionFile,
       },
       testDir: "./tests/frontend",
       dependencies: ["frontend-setup"],
@@ -72,8 +100,8 @@ export default defineConfig({
       name: "editor",
       use: {
         ...devices["Desktop Chrome"],
-        baseURL: "https://crudev.northeurope.cloudapp.azure.com/",
-        trace: "on",
+        baseURL: process.env.UMBRACO_BASE_URL,
+        storageState: umbracoSessionFile,
       },
       testDir: "./tests/editor",
       dependencies: ["editor-setup"],

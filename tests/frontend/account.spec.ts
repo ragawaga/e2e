@@ -1,24 +1,20 @@
 import { expect, test } from "@playwright/test";
-import { asAuthenticatedUser } from "../auth";
 
-test.describe("a logged in user with full permissions", () => {
-  asAuthenticatedUser();
-
-  test("should see their account settings", async ({ page }) => {
+test.describe("a logged in user", () => {
+  test("should see profile properties", async ({ page }) => {
     await page.goto("/account-settings");
 
     await expect(page.getByTestId("account-details")).toBeVisible();
 
-    for (const [field, value] of [
-      ["name", "Cru Testuser11"],
-      ["email", "Cruonlinetestuser11@gmail.com"],
-      ["company", "CRU International"],
-      ["job", "Research Analyst"],
-    ]) {
-      await expect(page.getByTestId(`account-${field}`)).toContainText(value);
+    for (const field of ["name", "email", "company", "job"]) {
+      const valueElement = page.getByTestId(`account-${field}`);
+
+      await expect(valueElement).toBeVisible();
     }
 
-    await page.waitForLoadState("networkidle");
-    await expect(page).toHaveScreenshot();
+    await page.getByTestId('tab-change-password').click();
+    await page.getByTestId('input-oldPassword').click();
+    await page.getByTestId('input-newPassword').click();
+    await page.getByText('Minimum length of 12 characters').click();
   });
 });
