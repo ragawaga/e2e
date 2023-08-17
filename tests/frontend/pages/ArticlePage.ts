@@ -1,7 +1,7 @@
 import { Page } from "@playwright/test";
-import { createComponentLocators } from "../../component";
+import { ComponentLocatorMap, createComponentLocators } from "../../component";
 
-export const ArticleScreenComponent = {
+export const ArticleScreenComponent : ComponentLocatorMap = {
   header: "h1",
   content: { testId: "article-content" },
   authors: { testId: "author-container" },
