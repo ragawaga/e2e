@@ -1,25 +1,26 @@
-import { expect, test} from "@playwright/test";
-import { globalLocators } from "./pages/GlobalLocators";
+import { expect } from "@playwright/test";
+import { test } from "../fixture";
+import { GlobalConstants } from "./pages/Layout";
 
 test.describe("CRUSpi Prices Page", () => {
 
-  test("can navigate straight to the correct URL", async ({ page }) => {
-    await page.goto(globalLocators.cruSpiPricesPageURL);
-    expect(await page.locator(globalLocators.header).textContent()).toEqual(globalLocators.cruspiString);
+  test("can navigate straight to the correct URL", async ({ page, layout  }) => {
+    await page.goto(GlobalConstants.cruSpiPricesPageURL);
+    expect(await layout.header.textContent()).toEqual(GlobalConstants.cruspiString);
   });
 
-  test("can navigate to cruspi prices page via the Prices menu", async ({ page }) => {
+  test("can navigate to cruspi prices page via the Prices menu", async ({ page, layout  }) => {
     await page.goto("/analysis");
     //TODO Somehow move to Global as we will need to access the prices menu often
     await page.getByRole('button', { name: 'Prices', exact: true }).hover();
-    await page.getByRole('link', { name: globalLocators.cruspiString }).click();
+    await page.getByRole('link', { name: GlobalConstants.cruspiString }).click();
     
-    expect(await page.locator(globalLocators.header).textContent()).toEqual(globalLocators.cruspiString);
+    expect(await layout.header.textContent()).toEqual(GlobalConstants.cruspiString);
   });
 
-  test("there are no tabs on the CRUSpi page and page structure is as expected", async ({ page }) => {
+  test("there are no tabs on the CRUSpi page and page structure is as expected", async ({ page, layout  }) => {
     await page.goto("/prices/cruspi");
-    expect( await page.locator(globalLocators.header).textContent()).toEqual(globalLocators.cruspiString);
+    expect( await layout.header.textContent()).toEqual(GlobalConstants.cruspiString);
     await expect( page.getByText('Price Indicators', { exact: true })).toBeVisible();
 
     //Check that there are no tabs on this Price page - only Price page with no tabs
@@ -47,28 +48,28 @@ test.describe("CRUSpi Prices Page", () => {
 
 test.describe("CRUSpi Downloads Page", () => {
 
-  test("Navigate to CRUspi downloads page", async ({ page }) => {
+  test("Navigate to CRUspi downloads page", async ({ page, layout  }) => {
 
     //Navigate directly the known URL
-    await page.goto(globalLocators.cruSpiDownloadsPageURL);
-    expect( await page.locator(globalLocators.header).textContent()).toEqual(globalLocators.cruspiString);
+    await page.goto(GlobalConstants.cruSpiDownloadsPageURL);
+    expect( await layout.header.textContent()).toEqual(GlobalConstants.cruspiString);
 
     //Check navigating via the Downloads Menu works (had issues in the past where CRUspi disappeared from the menu)
     await page.getByRole('link', { name: 'Downloads', exact: true }).click();
     
 
     //Check we are on the Download index page and CRUspi exists
-    await expect(page).toHaveURL(globalLocators.downloadsPageURL);
-    expect( await page.locator(globalLocators.header).textContent()).toEqual(globalLocators.downloadsPageTitle);
+    await expect(page).toHaveURL(GlobalConstants.downloadsPageURL);
+    expect( await layout.header.textContent()).toEqual(GlobalConstants.downloadsPageTitle);
     
 
     //Click through to the CRUspi downloads page
-    const cruspiLink = page.getByTestId('download-category__0-list').getByRole('link', { name: globalLocators.cruspiString });
+    const cruspiLink = page.getByTestId('download-category__0-list').getByRole('link', { name: GlobalConstants.cruspiString });
     await cruspiLink.isVisible();
     await cruspiLink.scrollIntoViewIfNeeded();
     await cruspiLink.click();
     
-    expect(await page.locator(globalLocators.header).textContent()).toEqual(globalLocators.cruspiString);
+    expect(await layout.header.textContent()).toEqual(GlobalConstants.cruspiString);
 
     //Check downloads links are there, and working
     //Use Feb 2022 as this file should always be there
