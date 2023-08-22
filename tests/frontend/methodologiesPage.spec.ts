@@ -9,7 +9,9 @@ test.describe("Methodologies Screen", () => {
 
     // Click Price methodologies within user menu
     //TODO Move the button John Smith into globalLocators somehow as it is used in a few tests
-    await page.getByRole('button', { name: 'John Smith' }).click();
+    //TODO as per Gary's feedback ideally we don't want to use text John Smith here, but I can't
+    //see an alternative as getById isn't a thing. Need FE to add a data-testid here
+    await page.getByRole('button', { name: globalLocators.userMenu.name }).click();
     await page.getByRole('link', { name: 'Price Methodologies' }).click();
 
     // Check we are now on the Price methodologies page

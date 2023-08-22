@@ -5,35 +5,33 @@ const expectedPageSize = 20;
 
 test.describe("Article Bookmarks", () => {
 
-  test("Default Screen after login has bookmarks", async ({ page }) => {
+  test("Default Screen after login has the bookmarks on every article", async ({ page }) => {
     await page.goto("/analysis");
     await expect(page.getByTitle('Bookmark')).toHaveCount(expectedPageSize);
   });
 
-  test("State change bookmark on article listing", async ({ page }) => {
+  test("Can change the state of the bookmark on article listing", async ({ page }) => {
     await page.goto("/analysis");
 
     await expect(page.getByTitle('Bookmark')).toHaveCount(expectedPageSize);
 
-    //Determine the state of the first bookmark
-    //If selected, unselect and check unselected
-    //If unselected, select and check selected    
+    //Determine the state of the first bookmark  
     const firstBookmark = page.getByTitle('Bookmark').first();
     const selected = await firstBookmark.getAttribute('data-selected');
     const selectedString = String(selected);
   
+    //If unselected, select and check selected  
+    //TODO I want to do something like if selected.isFalsy() but I can't figure out the command
     if (selectedString.startsWith('false')) {
       await firstBookmark.click();
       //Then assert it's now seleted
-      const selected = await firstBookmark.getAttribute('data-selected');
-      expect(selected).toBeTruthy();
+      await expect(firstBookmark).toHaveAttribute('data-selected', 'true');
     }
-
-    if (selectedString.startsWith('true')) {
+    //Otherwise it was selected, so unselect and check unselected
+    else {
       await firstBookmark.click();
       //Then assert it's now NOT seleted
-      const selected = await firstBookmark.getAttribute('data-selected');
-      expect(selected).toBe('false'); //toBeFalsy didn't work for some reason
+      await expect(firstBookmark).toHaveAttribute('data-selected', 'false');
     }
   });
 });

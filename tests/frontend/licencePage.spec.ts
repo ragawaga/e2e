@@ -9,8 +9,7 @@ test.describe("Licence Terms and Conditions Screen", () => {
     await expect(page).toHaveURL("/termsandconditions");
 
     // Check main heading is there within page banner
-    const text = await page.locator(globalLocators.header).textContent();
-    expect(text).toEqual('License Terms and Conditions');
+    await expect(page.locator(globalLocators.header)).toHaveText('License Terms and Conditions');
 
     // Check that the page renders body text
     expect(page.getByText('PRODUCT LICENCE', { exact: true }));

@@ -11,6 +11,7 @@ export const ArticleScreenComponent = {
   topicTags: { testId: "topic-tags" },
   featuredArticles: ".featured-article-card",
   attachments: ".attachment-card",
+  numberOfArticles: "20"
 };
 
 export function articlePageModel(page: Page) {
