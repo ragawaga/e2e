@@ -19,7 +19,7 @@ test.describe("Article Bookmarks", () => {
 
     //Determine the state of the first bookmark
     const firstBookmark = page.getByTitle("Bookmark").first();
-    const selected = await firstBookmark.getAttribute("data-selected");
+    const selected = await firstBookmark.getAttribute("data-selected") === "true";
 
     //If unselected, select and check selected
     if (!selected) {
