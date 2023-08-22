@@ -11,21 +11,19 @@ test.describe("CRUSpi Prices Page", () => {
 
   test("can navigate to cruspi prices page via the Prices menu", async ({ page, layout  }) => {
     await page.goto("/analysis");
-    //TODO Somehow move to Global as we will need to access the prices menu often
-    await page.getByRole('button', { name: 'Prices', exact: true }).hover();
-    await page.getByRole('link', { name: GlobalConstants.cruspiString }).click();
-    
+    await layout.pricesTopNav.hover();
+    await layout.cruspiMenuItem.click();
     expect(await layout.header.textContent()).toEqual(GlobalConstants.cruspiString);
   });
 
   test("there are no tabs on the CRUSpi page and page structure is as expected", async ({ page, layout  }) => {
-    await page.goto("/prices/cruspi");
+    await page.goto(GlobalConstants.cruSpiPricesPageURL);
     expect( await layout.header.textContent()).toEqual(GlobalConstants.cruspiString);
     await expect( page.getByText('Price Indicators', { exact: true })).toBeVisible();
 
     //Check that there are no tabs on this Price page - only Price page with no tabs
     //expect(await page.getByRole('tablist').count()).toBe(0); 
-    await expect(page.getByRole('tablist')).not.toBeAttached();
+    await expect(layout.pricesTabs).not.toBeAttached();
 
     //Check the Article content is there
     await expect(page.getByText('Price Indicators', { exact: true })).toBeVisible();
@@ -55,13 +53,11 @@ test.describe("CRUSpi Downloads Page", () => {
     expect( await layout.header.textContent()).toEqual(GlobalConstants.cruspiString);
 
     //Check navigating via the Downloads Menu works (had issues in the past where CRUspi disappeared from the menu)
-    await page.getByRole('link', { name: 'Downloads', exact: true }).click();
-    
-
+    await layout.downloadsTopNav.click();
+  
     //Check we are on the Download index page and CRUspi exists
     await expect(page).toHaveURL(GlobalConstants.downloadsPageURL);
     expect( await layout.header.textContent()).toEqual(GlobalConstants.downloadsPageTitle);
-    
 
     //Click through to the CRUspi downloads page
     const cruspiLink = page.getByTestId('download-category__0-list').getByRole('link', { name: GlobalConstants.cruspiString });
