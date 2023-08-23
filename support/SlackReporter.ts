@@ -1,9 +1,4 @@
-import type {
-  FullResult,
-  Reporter,
-  TestCase,
-  TestResult,
-} from "@playwright/test/reporter";
+import type { FullResult, Reporter, TestCase } from "@playwright/test/reporter";
 
 import { ChatPostMessageArguments, WebClient } from "@slack/web-api";
 import { createMessageBlock } from "./SlackReporterMessage";
@@ -30,7 +25,7 @@ class SlackReporter implements Reporter {
     this.notifyOnlyOnFailure = options.notifyOnlyOnFailure ?? true;
   }
 
-  onTestEnd(test: TestCase, result: TestResult): void {
+  onTestEnd(test: TestCase): void {
     this.tests[test.id] = test;
   }
 
@@ -52,7 +47,7 @@ class SlackReporter implements Reporter {
     if (lastMessage?.bot_id === self.bot_id) {
       console.info("Found existing message, updating in place");
 
-      const response = await this.client.chat.update({
+      await this.client.chat.update({
         channel,
         ts: lastMessage.ts!,
         ...body,
@@ -65,7 +60,11 @@ class SlackReporter implements Reporter {
         ...body,
       });
 
-      return response.message?.ts!;
+      if (!response.message) {
+        throw new Error("Failed to post Slack message");
+      }
+
+      return response.message.ts!;
     }
   }
 

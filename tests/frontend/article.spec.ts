@@ -1,4 +1,4 @@
-import { expect, test as base, Page } from "@playwright/test";
+import { expect } from "@playwright/test";
 import { articlePageModel } from "./pages/ArticlePage";
 import { createTestFixture } from "../fixture";
 
