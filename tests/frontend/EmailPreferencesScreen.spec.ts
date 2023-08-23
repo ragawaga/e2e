@@ -41,9 +41,9 @@ test.describe("Email preferences Screen", () => {
       emailPrefsModel.fertilizerAlertHeaderId).toHaveText(emailPrefsConstants.fertilizersText);
 
     //Check for the explanatory text on each of the 3 elements which have 'group' text
-    await page.getByText(emailPrefsConstants.newsAlertBlurb).isVisible();
-    await page.getByText(emailPrefsConstants.productAlertBlurb).isVisible();
-    await page.getByText(emailPrefsConstants.marketAlertBlurb).isVisible();
+    await expect (page.getByText(emailPrefsConstants.newsAlertBlurb)).toBeVisible();
+    await expect (page.getByText(emailPrefsConstants.productAlertBlurb)).toBeVisible();
+    await expect (page.getByText(emailPrefsConstants.marketAlertBlurb)).toBeVisible();
 
     // Count the number of checkboxes
     await expect(page.getByRole('checkbox')).toHaveCount(30);
@@ -54,7 +54,7 @@ test.describe("Email preferences Screen", () => {
     await expect(emailPrefsModel.checkBoxDescription).toHaveCount(23);
 
     //Check the value of the explanatory text is as expected
-    await page.getByText(emailPrefsConstants.explanatoryText).isVisible();
+    await expect (page.getByText(emailPrefsConstants.explanatoryText)).toBeVisible();
   });
 
   test("can navigate directly to the page tab via URL", async ({
