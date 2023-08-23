@@ -10,12 +10,9 @@ export const test = base.extend<
   },
 });
 
-export function createTestFixture<K extends string, T>(
-  name: K,
-  setup: (page: Page) => T
-) {
-  return test.extend<Record<K, T>>({
-    [name as any]: async ({ page }, use) => {
+export function createTestFixture<T>(name: string, setup: (page: Page) => T) {
+  return test.extend<Record<string, T>>({
+    [name as string]: async ({ page }, use) => {
       await use(setup(page));
     },
   });

@@ -2,7 +2,7 @@ import { expect, test as setup } from "@playwright/test";
 import { frontendSessionFile } from "../auth";
 
 setup("login as user", async ({ page }) => {
-  await page.goto("/", { waitUntil: "networkidle"});
+  await page.goto("/", { waitUntil: "networkidle" });
 
   // Check if we're still logged in from a previous test run
   const { pathname } = new URL(page.url());

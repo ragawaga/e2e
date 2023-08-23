@@ -23,23 +23,22 @@ function isRoleLocator(locator: LocatorSpecification): locator is RoleLocator {
   return typeof locator !== "string" && "role" in locator;
 }
 
-export function createComponentLocators<T extends { [k: string]: LocatorSpecification }>(
-  page: Page,
-  component: T
-) {
+export function createComponentLocators<
+  T extends { [k: string]: LocatorSpecification },
+>(page: Page, component: T) {
   const root = {} as ComponentLocators<T>;
 
-  for (let [k, v] of Object.entries(component)) {
+  for (const [k, v] of Object.entries(component)) {
     let locator: Locator;
     if (isRoleLocator(v)) {
-      const {role, ...attributes} = v;
-      locator = page.getByRole(role, attributes)
+      const { role, ...attributes } = v;
+      locator = page.getByRole(role, attributes);
     } else if (isTestIdLocator(v)) {
       locator = page.getByTestId(v.testId);
     } else {
       locator = page.locator(v);
     }
-    
+
     root[k as keyof T] = locator;
   }
 

@@ -6,16 +6,16 @@ setup("login as editor", async ({ page }) => {
 
   const { hash } = new URL(page.url());
   if (hash.startsWith("#/login")) {
-    let username = page.getByPlaceholder("Enter your username");
+    const username = page.getByPlaceholder("Enter your username");
     await username.fill(process.env.UMBRACO_USERNAME!);
     await username.press("Tab");
 
-    let password = page.getByRole("textbox", { name: "Enter your password" });
+    const password = page.getByRole("textbox", { name: "Enter your password" });
     await password.fill(process.env.UMBRACO_PASSWORD!);
     await password.press("Enter");
   }
 
-  let content = page.locator("#mainwrapper");
+  const content = page.locator("#mainwrapper");
   await expect(content).toBeVisible({ timeout: 10_000 });
 
   await page.context().storageState({ path: umbracoSessionFile });

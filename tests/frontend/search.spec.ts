@@ -40,8 +40,8 @@ test.describe("Search bar search", () => {
   });
 
   test("Search with common search term", async ({ page }) => {
-    await page.routeFromHAR('./hars/fruit.har', {
-      url: '*/api/*',
+    await page.routeFromHAR("./hars/fruit.har", {
+      url: "*/api/*",
       update: true,
     });
 
@@ -52,7 +52,7 @@ test.describe("Search bar search", () => {
     await search(page, "china");
 
     await expect(page.locator(_data_testid_chw_pagebanner_h1)).toContainText(
-      searchTerm
+      searchTerm,
     );
 
     await expect(page.locator(_chw_tab_button_title)).toContainText([
@@ -60,9 +60,7 @@ test.describe("Search bar search", () => {
       "My Documents",
     ]);
 
-    await expect(page.locator(_chw_article_item)).toHaveCount(
-      expectedPageSize
-    );
+    await expect(page.locator(_chw_article_item)).toHaveCount(expectedPageSize);
   });
 
   test.skip("Search with no results term", async ({ page }) => {
@@ -73,13 +71,11 @@ test.describe("Search bar search", () => {
     search(page, searchTerm);
 
     await expect(page.locator(_data_testid_chw_pagebanner_h1)).toContainText(
-      searchTerm
+      searchTerm,
     );
     await expect(page.locator(_chw_tab_button_title)).toBeAttached();
     await expect(page.locator(_chw_searchlist_count)).toContainText("(0)");
-    await expect(page.locator(_chw_article_item)).toHaveCount(
-      expectedPageSize
-    );
+    await expect(page.locator(_chw_article_item)).toHaveCount(expectedPageSize);
   });
 
   //   test("Examine first article search summary", async ({ page }) => {

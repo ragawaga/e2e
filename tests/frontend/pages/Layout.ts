@@ -6,6 +6,6 @@ export function layoutPageModel(page: Page) {
     header: "h1",
     userMenu: { role: "button", name: "John Smith" },
     methodologiesLink: { role: "link", name: "Price Methodologies" },
-    footer: "#chw-footer"
+    footer: "#chw-footer",
   });
 }
