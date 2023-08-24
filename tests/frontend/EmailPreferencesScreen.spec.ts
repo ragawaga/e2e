@@ -24,21 +24,8 @@ test.describe("Email preferences Screen", () => {
     // Navigate to the Email preferences tab
     await emailPrefsModel.emailPrefsTabLink.click();
 
-    // Check for the Email preferences lists
-    await expect(
-      emailPrefsModel.newsAlertHeaderId).toHaveText(emailPrefsConstants.newsAlertText);
-
-    await expect(
-      emailPrefsModel.productAlertHeaderId).toHaveText(emailPrefsConstants.productAlertText);
-
-    await expect(
-      emailPrefsModel.marketAlertHeaderId).toHaveText(emailPrefsConstants.marketAlertText);
-
-    await expect(
-      emailPrefsModel.priceAlertHeaderId).toHaveText(emailPrefsConstants.priceAlertText);
-
-    await expect(
-      emailPrefsModel.fertilizerAlertHeaderId).toHaveText(emailPrefsConstants.fertilizersText);
+    // Check for the Email preferences lists to validate the basic page structure is there
+    await validatePageStructure(emailPrefsModel);
 
     //Check for the explanatory text on each of the 3 elements which have 'group' text
     await expect (page.getByText(emailPrefsConstants.newsAlertBlurb)).toBeVisible();
@@ -66,7 +53,11 @@ test.describe("Email preferences Screen", () => {
 
     //Check tabs are there. Second tab should contain 'Email Preferences'
     await expect(emailPrefsModel.emailPrefsTabLink).toHaveText(emailPrefsConstants.emailPrefsTabText);
+    await validatePageStructure(emailPrefsModel);
 
+  });
+
+  async function validatePageStructure(emailPrefsModel: ReturnType<typeof emailPrefsPageModel>) {
     //Check basic page structire exists
     await expect(
       emailPrefsModel.newsAlertHeaderId).toHaveText(emailPrefsConstants.newsAlertText);
@@ -82,7 +73,9 @@ test.describe("Email preferences Screen", () => {
 
     await expect(
       emailPrefsModel.fertilizerAlertHeaderId).toHaveText(emailPrefsConstants.fertilizersText);
+    
+}
 
-  });
+
     
 });
