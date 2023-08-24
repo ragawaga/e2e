@@ -1,7 +1,7 @@
 import { PlaywrightTestConfig, defineConfig, devices } from "@playwright/test";
-import { umbracoSessionFile, frontendSessionFile } from "./tests/auth";
 import dotenv from "dotenv";
 import dotenvExpand from "dotenv-expand";
+import { frontendSessionFile, umbracoSessionFile } from "./tests/auth";
 
 const environment = process.env.PLAYWRIGHT_ENVIRONMENT ?? "dev";
 
@@ -23,6 +23,7 @@ if (process.env.CI) {
       {
         token: process.env.SLACK_TOKEN,
         channel: process.env.SLACK_CHANNEL,
+        notify: process.env.SLACK_NOTIFY === 'true',
         notifiedUsers: [/* garytierney */ "U5YN0B43S", /* Christine */ "U23H8R73J"],
         notifyOnlyOnFailure: false,
       },
