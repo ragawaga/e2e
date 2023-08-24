@@ -25,7 +25,7 @@ if (process.env.CI) {
         channel: process.env.SLACK_CHANNEL,
         notify: process.env.SLACK_NOTIFY === 'true',
         notifiedUsers: [/* garytierney */ "U5YN0B43S", /* Christine */ "U23H8R73J"],
-        notifyOnlyOnFailure: false,
+        notifyOnlyOnFailure: true,
       },
     ],
     ["dot"]
