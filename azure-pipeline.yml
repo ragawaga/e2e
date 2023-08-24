@@ -78,12 +78,3 @@ jobs:
                 inlineScript: |
                   az storage blob upload-batch --account-name crutestreports --destination \$web/playwright-${{ parameters.environment }} --source "$(Pipeline.Workspace)/test-report/" --overwrite true
               condition: and(succeededOrFailed(), ne(variables['Build.Reason'], 'PullRequest'))
-  - job: Upload_E2E_Report
-    condition: always()
-    dependsOn:
-      - Run_E2E_Tests
-    pool:
-      vmImage: ubuntu-20.04
-    steps:
-      - download: current
-        artifact: test-report
