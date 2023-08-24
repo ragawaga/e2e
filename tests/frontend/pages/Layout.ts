@@ -9,7 +9,6 @@ export const GlobalConstants = {
   downloadsPageTitle: 'Downloads'
 };
 
-
 export function layoutPageModel(page: Page) {
   return createComponentLocators(page, {
     header: "h1",
@@ -19,6 +18,8 @@ export function layoutPageModel(page: Page) {
     cruspiMenuItem: {role: "link", name: GlobalConstants.cruspiString },
     pricesTabs: {role: "tablist" },
     methodologiesLink: { role: "link", name: "Price Methodologies" },
+    accountSettingsLink: { role: "link", name: "Account Settings" },
     footer: "#chw-footer"
   });
+
 }
