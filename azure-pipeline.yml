@@ -33,6 +33,11 @@ jobs:
           steps:
             - checkout: self
             - task: DownloadSecureFile@1
+              name: globalConfiguration
+              displayName: Download global configuration
+              inputs:
+                secureFile: '.env.all.local'
+            - task: DownloadSecureFile@1
               name: environmentConfiguration
               displayName: Download environment configuration
               inputs:
@@ -40,6 +45,7 @@ jobs:
             - script: |
                 echo Installing $(environmentConfiguration.secureFilePath) to current folder...
                 mv "$(environmentConfiguration.secureFilePath)" .
+                mv "$(globalConfiguration.secureFilePath)" .
               displayName: Setup environment configuration
             - task: Bash@3
               displayName: Run Playwright tests
