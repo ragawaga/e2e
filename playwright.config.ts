@@ -5,6 +5,9 @@ import dotenvExpand from "dotenv-expand";
 
 const environment = process.env.PLAYWRIGHT_ENVIRONMENT ?? "dev";
 
+const localAllEnvsConfig = dotenv.config({path: `.env.all.local`});
+dotenvExpand.expand(localAllEnvsConfig);
+
 const localConfig = dotenv.config({ path: `.env.${environment}.local` });
 dotenvExpand.expand(localConfig);
 
