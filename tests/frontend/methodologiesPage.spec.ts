@@ -9,12 +9,14 @@ test.describe("Methodologies Screen", () => {
     await layout.methodologiesLink.click();
 
     await expect(page).toHaveURL("/methodologies");
-    await expect(layout.header).toHaveText("Price Methodologies & Compliance Framework");
+    await expect(layout.header).toHaveText(
+      "Price Methodologies & Compliance Framework",
+    );
 
     await expect(
       page.getByText(
-        "CRU’s Governance and internal oversight structures, policies and working practic"
-      )
+        "CRU’s Governance and internal oversight structures, policies and working practic",
+      ),
     ).toBeVisible();
   });
 });

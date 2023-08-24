@@ -6,20 +6,6 @@ const _data_testid_chw_pagebanner_h1 = '[data-testid="chw-pagebanner"] h1';
 const _chw_tab_button_title = ".chw-tab-button__title";
 const _chw_article_item = ".chw-article-item";
 const _chw_searchlist_count = ".chw-searchlist-count";
-const _chw_article_item_heading_a = ".chw-article-item__heading a";
-const div_data_testid_teaser_ = 'div[data-testid="teaser"]';
-const _chw_article_item_info = ".chw-article-item__info";
-const _chw_searchlist_filters = ".chw-searchlist-filters";
-const _chw_filter_widget = ".chw-filter-widget";
-const _pagination = ".pagination";
-const _aria_label_Next_page_ = '[aria-label="Next page"]';
-const _aria_label_Previous_page_ = '[aria-label="Previous page"]';
-const _data_testid_tab_my_documents_ = '[data-testid="tab-my-documents"]';
-const _chw_archives_list_item = ".chw-archives-list__item";
-const _nth_child_1_chw_article_item_platform_tags =
-  ":nth-child(1) > .chw-article-item__platform-tags";
-const _nth_child_1_data_testid_platform_tags_ =
-  ':nth-child(1) > [data-testid="platform-tags"]';
 
 test.describe("Search bar search", () => {
   const search = async (page: Page, term: string) => {
@@ -40,8 +26,8 @@ test.describe("Search bar search", () => {
   });
 
   test("Search with common search term", async ({ page }) => {
-    await page.routeFromHAR('./hars/fruit.har', {
-      url: '*/api/*',
+    await page.routeFromHAR("./hars/fruit.har", {
+      url: "*/api/*",
       update: true,
     });
 
@@ -60,9 +46,7 @@ test.describe("Search bar search", () => {
       "My Documents",
     ]);
 
-    await expect(page.locator(_chw_article_item)).toHaveCount(
-      expectedPageSize
-    );
+    await expect(page.locator(_chw_article_item)).toHaveCount(expectedPageSize);
   });
 
   test.skip("Search with no results term", async ({ page }) => {
@@ -77,9 +61,7 @@ test.describe("Search bar search", () => {
     );
     await expect(page.locator(_chw_tab_button_title)).toBeAttached();
     await expect(page.locator(_chw_searchlist_count)).toContainText("(0)");
-    await expect(page.locator(_chw_article_item)).toHaveCount(
-      expectedPageSize
-    );
+    await expect(page.locator(_chw_article_item)).toHaveCount(expectedPageSize);
   });
 
   //   test("Examine first article search summary", async ({ page }) => {

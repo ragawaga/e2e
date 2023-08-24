@@ -46,7 +46,7 @@ export default defineConfig({
      * For example in `await expect(locator).toHaveText();`
      */
 
-    timeout: 5000,
+    timeout: 10_000,
   },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,

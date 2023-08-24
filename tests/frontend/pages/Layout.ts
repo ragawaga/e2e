@@ -18,8 +18,8 @@ export function layoutPageModel(page: Page) {
     cruspiMenuItem: {role: "link", name: GlobalConstants.cruspiString },
     pricesTabs: {role: "tablist" },
     methodologiesLink: { role: "link", name: "Price Methodologies" },
+    footer: "#chw-footer",
     accountSettingsLink: { role: "link", name: "Account Settings" },
-    footer: "#chw-footer"
   });
 
 }
