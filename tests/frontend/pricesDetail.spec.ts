@@ -11,11 +11,11 @@ test.describe("Prices detail pages", () => {
     await page.goto("/price/543");
     
     // Check the title
-    expect(pricesDetail.h1).toContain("Ferromanganese EU MC");
+    await expect(pricesDetail.h1).toHaveText(/Ferromanganese EU MC/);
     
-    expect(pricesDetail._data_testid_content_heading_)
+    await expect(pricesDetail._data_testid_content_heading_)
       //.first()
-      .toContain("Latest Prices");
+      .toHaveText("Latest Prices");
 
     // There should be 2 price cards.
     expect(pricesDetail._data_testid_prices_card_).toHaveLength(2);
@@ -26,11 +26,10 @@ test.describe("Prices detail pages", () => {
     await page.goto("/price/1562");
     
     // Check the title
-    expect(pricesDetail.h1).toContain("Bare Fibre");
+    await expect(pricesDetail.h1).toHaveText(/Bare Fibre/);
 
-    expect(pricesDetail._data_testid_content_heading_)
-    //.first()
-      .toContain("Latest Prices");
+    await expect(pricesDetail._data_testid_content_heading_)
+      .toHaveText("Latest Prices");
 
     // There should only be 1 price card.
     expect(pricesDetail._data_testid_prices_card_).toHaveLength(1);
