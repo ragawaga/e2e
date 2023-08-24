@@ -1,18 +1,17 @@
 import { Page } from "@playwright/test";
 import { createComponentLocators } from "../../component";
 
-const PricesDetailLocators = {
-//   articleCounter: { testId: "number-of-articles" },
-//   articleHeaders: { testId: "article-item-heading-link" },
-//   articles: "article.chw-article-item",
-};
-
 export function pricesDetailPageModel(page: Page) {
-  const screen = createComponentLocators(page, PricesDetailLocators);
+  const screen = createComponentLocators(page, {
+    h1: "h1",
+    _data_testid_content_heading_: {testId: "content-heading"},
+    _data_testid_prices_card_: {testId: "prices-card"},
+    _data_testid_prices_table_: {testId:"prices-table"}
+});
 
   return {
-    async load() {
-      await page.goto("/price/1");
+    async load(id: number) {
+      await page.goto(`/price/${id}/`);
     },
     ...screen,
   };
