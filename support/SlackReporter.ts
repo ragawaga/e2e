@@ -6,6 +6,7 @@ import { createMessageBlock } from "./SlackReporterMessage";
 export type SlackReporterOptions = {
   token?: string;
   channel?: string;
+  notify?: boolean;
   notifiedUsers?: string[];
   notifyOnlyOnFailure?: boolean;
 };
@@ -15,12 +16,14 @@ class SlackReporter implements Reporter {
   private readonly tests: Record<string, TestCase> = {};
   private readonly channel?: string;
 
+  private readonly notify: boolean;
   private readonly notifiedUsers: string[];
   private readonly notifyOnlyOnFailure: boolean;
 
   constructor(options: SlackReporterOptions = {}) {
     this.client = new WebClient(options.token);
     this.channel = options.channel;
+    this.notify = options.notify ?? false;
     this.notifiedUsers = options.notifiedUsers ?? [];
     this.notifyOnlyOnFailure = options.notifyOnlyOnFailure ?? true;
   }
@@ -69,7 +72,7 @@ class SlackReporter implements Reporter {
   }
 
   async onEnd(result: FullResult) {
-    if (!this.channel) {
+    if (!this.channel || !this.notify) {
       return;
     }
 

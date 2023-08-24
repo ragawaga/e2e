@@ -47,6 +47,10 @@ jobs:
                 CI: true
                 SLACK_TOKEN: $(SLACK_TOKEN)
                 SLACK_CHANNEL: $(SLACK_CHANNEL)
+                ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+                  SLACK_NOTIFY: false
+                ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
+                  SLACK_NOTIFY: true
                 PLAYWRIGHT_ENVIRONMENT: ${{ parameters.environment }}
               inputs:
                 targetType: inline
@@ -64,26 +68,13 @@ jobs:
                 failTaskOnFailedTests: true
                 testRunTitle: End-to-end Test Results
               condition: succeededOrFailed()
-            - publish: playwright-report
-              displayName: Publish powershell scripts for later use
-              artifact: test-report
-              condition: succeededOrFailed()
-  - job: Upload_E2E_Report
-    condition: always()
-    dependsOn:
-      - Run_E2E_Tests
-    pool:
-      vmImage: ubuntu-20.04
-    steps:
-      - download: current
-        artifact: test-report
-      - task: AzureCLI@2
-        inputs:
-          azureSubscription: >-
-            Microsoft Azure - CRU Online Development
-            (bbe03d7e-0fe4-4f65-a765-9427e562b572)
-          scriptType: bash
-          scriptLocation: inlineScript
-          inlineScript: |
-            az storage blob upload-batch --account-name crutestreports --destination \$web/playwright-${{ parameters.environment }} --source "$(Pipeline.Workspace)/test-report/" --overwrite true
-        condition: succeededOrFailed()
+            - task: AzureCLI@2
+              inputs:
+                azureSubscription: >-
+                  Microsoft Azure - CRU Online Development
+                  (bbe03d7e-0fe4-4f65-a765-9427e562b572)
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  az storage blob upload-batch --account-name crutestreports --destination \$web/playwright-${{ parameters.environment }} --source "$(Pipeline.Workspace)/test-report/" --overwrite true
+              condition: and(succeededOrFailed(), ne(variables['Build.Reason'], 'PullRequest'))
