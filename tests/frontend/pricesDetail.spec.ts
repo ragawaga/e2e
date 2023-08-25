@@ -8,7 +8,7 @@ const test = createTestFixture("pricesDetail", pricesDetailPageModel)
 
 test.describe("Prices detail pages", () => {
   test("Display Ferromanganese price detail page", async ({ pricesDetail, page }) => {
-    await page.goto("/price/543");
+    await pricesDetail.load(543);
     
     // Check the title
     await expect(pricesDetail.h1).toHaveText(/Ferromanganese EU MC/);
@@ -21,7 +21,7 @@ test.describe("Prices detail pages", () => {
   });
 
   test("Display Optical fibre price detail page", async ({ pricesDetail, page }) => {
-    await page.goto("/price/1562");
+    await pricesDetail.load(1562);
     
     // Check the title
     await expect(pricesDetail.h1).toHaveText(/Bare Fibre/);
@@ -35,7 +35,7 @@ test.describe("Prices detail pages", () => {
 
   // Test xlsx download - wait for download to complete
   test("Download chart XLS", async ({ pricesDetail, page }) => {
-    await page.goto("/price/1");
+    await pricesDetail.load(1);
     await expect(pricesDetail.chartDlMenu).toBeVisible()
     const downloadPromise = page.waitForEvent('download');
     await pricesDetail.chartDlMenu.first().click();
