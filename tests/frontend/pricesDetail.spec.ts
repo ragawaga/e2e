@@ -33,18 +33,16 @@ test.describe("Prices detail pages", () => {
     await expect(pricesDetail.pricesTable).toHaveCount(1);
   });
 
-  // Test xlsx download
+  // Test xlsx download - wait for download to complete
   test("Download chart XLS", async ({ pricesDetail, page }) => {
     await page.goto("/price/1");
-    await expect(pricesDetail.chartDlMenu).toBeInViewport()
-    //const downloadPromise = page.waitForEvent('download');
+    await expect(pricesDetail.chartDlMenu).toBeVisible()
+    const downloadPromise = page.waitForEvent('download');
     await pricesDetail.chartDlMenu.first().click();
-    await expect(pricesDetail.downloadXLS).toBeInViewport()
-    //await pricesDetail.downloadXLS.first().click()
-    //const download = await downloadPromise;
-    //const path = (await download.path());
-    // expect(path).toContain(/Urea Prilled Bulk FOB Black Sea Spot/);
-    // expect(path).toContain(/.xlsx/);
+    await expect(pricesDetail.downloadXLS).toBeVisible()
+    await pricesDetail.downloadXLS.first().click()
+    const download = await downloadPromise;
+    await download.path();
   });
 
 });
