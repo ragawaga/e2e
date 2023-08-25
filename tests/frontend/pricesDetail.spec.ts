@@ -7,7 +7,7 @@ import { pricesDetailPageModel } from "./pages/PricesDetailPage";
 const test = createTestFixture("pricesDetail", pricesDetailPageModel)
 
 test.describe("Prices detail pages", () => {
-  test("Display Ferromanganese price detail page", async ({ pricesDetail, page }) => {
+  test("Display Ferromanganese price detail page", async ({ pricesDetail }) => {
     await pricesDetail.load(543);
     
     // Check the title
@@ -20,7 +20,7 @@ test.describe("Prices detail pages", () => {
     await expect(pricesDetail.pricesTable).toHaveCount(2);
   });
 
-  test("Display Optical fibre price detail page", async ({ pricesDetail, page }) => {
+  test("Display Optical fibre price detail page", async ({ pricesDetail }) => {
     await pricesDetail.load(1562);
     
     // Check the title
