@@ -50,7 +50,7 @@ const test = createTestFixture("article", articlePageModel);
 This call will override the `test` function to supply an additional `article` property alongside the `page` object, where the articles value will be created from the `articlePageModel` function. We can see where that happens here:
 
 ```typescript
-export const ArticleScreenComponent : ComponentLocatorMap = {
+export const ArticleScreenComponent: ComponentLocatorMap = {
   header: "h1",
   content: { testId: "article-content" },
   authors: { testId: "author-container" },
@@ -60,7 +60,7 @@ export const ArticleScreenComponent : ComponentLocatorMap = {
   topicTags: { testId: "topic-tags" },
   featuredArticles: ".featured-article-card",
   attachments: ".attachment-card",
-  userMenu: { role: 'button', name: 'John Smith' }
+  userMenu: { role: "button", name: "John Smith" },
 };
 
 export function articlePageModel(page: Page) {
@@ -81,6 +81,7 @@ The `ComponentLocatorMap` pattern shown currently supports:
 - CSS selectors (just a string)
 - Test IDs (an object with a `testId` property)
 - Role selectors (an object with a `role` property, and any other valid role selector property such as `name`)
+- Text selectors (which uses `getByText` - should only be used when `Role` and `testID` are unavailable, e.g. to find elements created by third party packages e.g. Highcharts export menu.)
 
 This pattern is ultimately a shortcut. The following code below is equivalent for adding a `userMenu` property to the page object model:
 
@@ -92,7 +93,7 @@ export function articlePageModel(page: Page) {
     async load(id: number) {
       await page.goto(`/analysis/article/${id}/`);
     },
-    userMenu: page.getByRole('button', { name: 'John Smith' }),
+    userMenu: page.getByRole("button", { name: "John Smith" }),
     ...screen,
   };
 }
@@ -101,12 +102,12 @@ export function articlePageModel(page: Page) {
 Looking back at `article.spec.ts`, we can see how to make use of these properties/functions within a test:
 
 ```typescript
-  test("should have a body and header", async ({ article, page }) => {
-    await article.load(143080);
-    await expect(article.header).toBeVisible();
-    await expect(article.content).toBeVisible();
-    await article.userMenu.click();
-  });
+test("should have a body and header", async ({ article, page }) => {
+  await article.load(143080);
+  await expect(article.header).toBeVisible();
+  await expect(article.content).toBeVisible();
+  await article.userMenu.click();
+});
 ```
 
 ## Getting notified
