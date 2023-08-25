@@ -7,8 +7,8 @@ export function pricesDetailPageModel(page: Page) {
     contentHeading: {testId: "content-heading"},
     pricesCard: {testId: "prices-card"},
     pricesTable: {testId:"prices-table"},
-    chartDlMenu: {role: 'button', name: /view chart menu/},
-    downloadXLS: {text: /download xls/}
+    chartDlMenu: {role: 'button', name: /view chart menu/i},
+    downloadXLS: {text: /download xls/i}
 });
 
   return {
