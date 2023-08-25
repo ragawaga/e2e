@@ -8,7 +8,7 @@ const test = createTestFixture("pricesDetail", pricesDetailPageModel)
 
 test.describe("Prices detail pages", () => {
   test("Display Ferromanganese price detail page", async ({ pricesDetail, page }) => {
-    await page.goto("/price/543");
+    await pricesDetail.load(543);
     
     // Check the title
     await expect(pricesDetail.h1).toHaveText(/Ferromanganese EU MC/);
