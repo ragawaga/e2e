@@ -13,7 +13,8 @@ export type RoleAttributes = GetByRoleParams[1];
 export type CssSelector = string;
 export type TestId = { testId: string };
 export type RoleLocator = { role: Role } & RoleAttributes;
-export type LocatorSpecification = CssSelector | RoleLocator | TestId;
+export type TextLocator = { text: RegExp | string };
+export type LocatorSpecification = CssSelector | RoleLocator | TestId | TextLocator;
 
 function isTestIdLocator(locator: LocatorSpecification): locator is TestId {
   return typeof locator !== "string" && "testId" in locator;
@@ -21,6 +22,10 @@ function isTestIdLocator(locator: LocatorSpecification): locator is TestId {
 
 function isRoleLocator(locator: LocatorSpecification): locator is RoleLocator {
   return typeof locator !== "string" && "role" in locator;
+}
+
+function isTextLocator(locator: LocatorSpecification): locator is TextLocator {
+  return typeof locator !== "string" && "text" in locator;
 }
 
 export function createComponentLocators<
@@ -35,6 +40,8 @@ export function createComponentLocators<
       locator = page.getByRole(role, attributes);
     } else if (isTestIdLocator(v)) {
       locator = page.getByTestId(v.testId);
+    } else if (isTextLocator(v)) {
+      locator = page.getByText(v.text);
     } else {
       locator = page.locator(v);
     }
