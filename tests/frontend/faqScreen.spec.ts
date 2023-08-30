@@ -6,7 +6,11 @@ import { faqConstants, faqPageModel } from "./pages/faqPage";
 const test = createTestFixture("faqPageModel", faqPageModel);
 
 test.describe("FAQ Screen", () => {
-  test("should have the correct FAQ page structure", async ({ page, layout, faqPageModel }) => {
+  test("should have the correct FAQ page structure", async ({
+    page,
+    layout,
+    faqPageModel,
+  }) => {
     await page.goto(GlobalConstants.home);
 
     //Click Account Setting link from the user menu
@@ -17,10 +21,12 @@ test.describe("FAQ Screen", () => {
     await expect(page).toHaveURL(/help*/);
 
     //Check banner is there, and contains 'User guides'
-    expect(await layout.header.textContent()).toEqual(faqConstants.faqHeader);
+    await expect(layout.header).toHaveText(faqConstants.faqHeader);
 
     //Check tabs are there. First tab should be 'User guides'
-    await expect(page.getByRole("tablist").first()).toContainText(faqConstants.firstAccordianText);
+    await expect(page.getByRole("tablist").first()).toContainText(
+      faqConstants.faqFirstTabText
+    );
 
     //Check that there is at least one accordian but that all accordians are closed
     await expect(faqPageModel.faqAccordian).toHaveCount(6);
@@ -33,6 +39,5 @@ test.describe("FAQ Screen", () => {
     //Close accordian, check that the data no longer displays
     await faqPageModel.firstAccordianButton.click();
     await expect(page.getByText(faqConstants.firstAccordianText)).toBeHidden();
-
   });
 });
