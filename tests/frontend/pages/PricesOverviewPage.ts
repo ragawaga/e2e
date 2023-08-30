@@ -13,12 +13,13 @@ export function pricesOverviewPageModel(page: Page) {
     pricesCardChangeLabel: {testId: "prices-card-change-label"},
     pricesCardFootnoteDate: {testId: "prices-card-footnote-date"},
     pricesCardFootnoteFreq: {testId: "prices-card-footnote-frequency"},
-    
+    articleItemHeadingLink: {testId: "article-item-heading-link"},
+
 });
 
   return {
-    async load(id: number) {
-      await page.goto(`/price/${id}/`);
+    async load(id: string) {
+      await page.goto(`/price/${id}?tab=overview`);
     },
     ...screen,
   };
