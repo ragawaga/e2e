@@ -43,7 +43,7 @@ test.describe("Email preferences Screen", () => {
   });
 
   test("can navigate directly to the page tab via URL", async ({
-    page, layout, emailPrefsModel
+    emailPrefsModel
   }) => {
 
     //Navigate directly to the URL
