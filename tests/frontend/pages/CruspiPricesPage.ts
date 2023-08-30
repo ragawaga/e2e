@@ -3,11 +3,10 @@ import { createComponentLocators } from "../../component";
 
 export function cruspiPricesPageModel(page: Page) {
   const screen = createComponentLocators(page, {
-    header: "h1",
     pricesDownloadButton: { testId: "prices-download-button" },
-    pricesTable: { testId: "prices-table"},
-    pricesChart: { testId: "cruspi-chart"},
-    priceNoticesButton: { testId: "price-notices-button"}
+    pricesTable: { testId: "prices-table" },
+    pricesChart: { testId: "cruspi-chart" },
+    priceNoticesButton: { testId: "price-notices-button" }
   });
 
   return {
