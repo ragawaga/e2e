@@ -6,8 +6,6 @@ import { pricesOverviewPageModel } from "./pages/PricesOverviewPage";
 
 const test = createTestFixture("pricesOverview", pricesOverviewPageModel)
 
-// const _data_testid_tab_overview_ = '[data-testid="tab-overview"]';
-// const _data_testid_prices_card_ = '[data-testid="prices-card"]';
 // const _data_testid_prices_card_title_ = '[data-testid="prices-card-title"]';
 // const _data_testid_prices_card_price_value_ =
 //   '[data-testid="prices-card-price-value"]';
@@ -28,11 +26,9 @@ const _highcharts_container = ".highcharts-container";
 
 test.describe("Prices overview tab page", () => {
   test("Display Latest Prices price cards", async ({ page, pricesOverview }) => {
-    await page.goto("/prices/aluminium?tab=overview");
-
+    await pricesOverview.load("aluminium");
     await expect(pricesOverview.overviewTab).toBeAttached();
-
-    await expect(pricesOverview.pricesCard.count()).toBeGreaterThan(0)
+    expect(await pricesOverview.pricesCard.count()).toBeGreaterThan(0);
 
     page.locator(_data_testid_prices_card_title_).each(($priceCardTitle) => {
       expect($priceCardTitle.length).to.be.gt(0);

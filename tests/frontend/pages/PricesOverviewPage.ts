@@ -19,7 +19,7 @@ export function pricesOverviewPageModel(page: Page) {
 
   return {
     async load(id: string) {
-      await page.goto(`/price/${id}?tab=overview`);
+      await page.goto(`/prices/${id}?tab=overview`);
     },
     ...screen,
   };
