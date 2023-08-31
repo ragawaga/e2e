@@ -8,6 +8,7 @@ export const GlobalConstants = {
   downloadsPageURL: '/downloads',
   downloadsPageTitle: 'Downloads',
   home: "/",
+  isSelectedAttribute: "data-selected",
 };
 
 export function layoutPageModel(page: Page) {
