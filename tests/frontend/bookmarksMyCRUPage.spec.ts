@@ -13,16 +13,16 @@ test.describe("MyCRU Bookmark Tab", () => {
     await expect(page).toHaveURL(myCRUConstants.myCRUURL);
 
     //Check banner is there, and contains 'My CRU'
-    expect(await layout.header.textContent()).toEqual(myCRUConstants.myCRUPageHeader);
+    await expect(layout.header).toHaveText(myCRUConstants.myCRUPageHeader);
   });
 
-  test("Ensure Bookmark tab exits", async ({ page, layout, myCRUModel
+  test("Ensure Bookmark tab exits", async ({ myCRUModel
   }) => {
     myCRUModel.load();
     await expect(myCRUModel.bookmarkTab).toHaveText(myCRUConstants.bookmarksTabText);
   });
 
-  test("Ensure there is a list of bookmarks", async ({ page, layout, myCRUModel
+  test("Ensure there is a list of bookmarks", async ({ page, myCRUModel
   }) => {
 
     await page.goto(GlobalConstants.home);
