@@ -14,7 +14,9 @@ export function pricesOverviewPageModel(page: Page) {
     pricesCardFootnoteDate: {testId: "prices-card-footnote-date"},
     pricesCardFootnoteFreq: {testId: "prices-card-footnote-frequency"},
     articleItemHeadingLink: {testId: "article-item-heading-link"},
-
+    articleStreamList: ".article-stream-list",
+    highchartsContainer: ".highcharts-container",
+    
 });
 
   return {
