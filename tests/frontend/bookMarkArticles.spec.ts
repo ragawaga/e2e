@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { GlobalConstants } from "./pages/Layout";
 
 const expectedPageSize = 20;
 
