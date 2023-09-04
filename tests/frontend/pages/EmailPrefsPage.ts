@@ -18,13 +18,12 @@ export const emailPrefsConstants = {
 export function emailPrefsPageModel(page: Page) {
 
   const screen = createComponentLocators(page, {
-    header: "h1",
-    emailPrefsTabLink : { testId: "tab-email-preferences" },
-    newsAlertHeaderId: {testId: "preferences-title-news-alerts" },
-    productAlertHeaderId: {testId: "preferences-title-product-alerts" },
-    marketAlertHeaderId: {testId: "preferences-title-market-alerts" },
-    fertilizerAlertHeaderId: {testId: "preferences-title-fertilizers" },
-    priceAlertHeaderId: {testId: "preferences-title-price-alerts"},
+    emailPrefsTabLink: { testId: "tab-email-preferences" },
+    newsAlertHeaderId: { testId: "preferences-title-news-alerts" },
+    productAlertHeaderId: { testId: "preferences-title-product-alerts" },
+    marketAlertHeaderId: { testId: "preferences-title-market-alerts" },
+    fertilizerAlertHeaderId: { testId: "preferences-title-fertilizers" },
+    priceAlertHeaderId: { testId: "preferences-title-price-alerts" },
     checkBoxDescription: ".chw-fw-checkbox__description"
   });
 

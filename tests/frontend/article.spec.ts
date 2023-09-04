@@ -1,13 +1,13 @@
 import { expect } from "@playwright/test";
-import { articlePageModel } from "./pages/ArticlePage";
 import { createTestFixture } from "../fixture";
+import { articlePageModel } from "./pages/ArticlePage";
 
 const test = createTestFixture("article", articlePageModel);
 
 test.describe("Article Screen", () => {
-  test("should have a body and header", async ({ article, page }) => {
+  test("should have a body and header", async ({ article, page, layout }) => {
     await page.goto("/analysis/article/143080");
-    await expect(article.header).toBeVisible();
+    await expect(layout.header).toBeVisible();
     await expect(article.content).toBeVisible();
   });
 

@@ -33,6 +33,11 @@ jobs:
           steps:
             - checkout: self
             - task: DownloadSecureFile@1
+              name: globalConfiguration
+              displayName: Download global configuration
+              inputs:
+                secureFile: '.env.all.local'
+            - task: DownloadSecureFile@1
               name: environmentConfiguration
               displayName: Download environment configuration
               inputs:
@@ -40,6 +45,8 @@ jobs:
             - script: |
                 echo Installing $(environmentConfiguration.secureFilePath) to current folder...
                 mv "$(environmentConfiguration.secureFilePath)" .
+                echo Installing $(globalConfiguration.secureFilePath) to current folder...
+                mv "$(globalConfiguration.secureFilePath)" .
               displayName: Setup environment configuration
             - task: Bash@3
               displayName: Run Playwright tests
@@ -68,13 +75,25 @@ jobs:
                 failTaskOnFailedTests: true
                 testRunTitle: End-to-end Test Results
               condition: succeededOrFailed()
-            - task: AzureCLI@2
-              inputs:
-                azureSubscription: >-
-                  Microsoft Azure - CRU Online Development
-                  (bbe03d7e-0fe4-4f65-a765-9427e562b572)
-                scriptType: bash
-                scriptLocation: inlineScript
-                inlineScript: |
-                  az storage blob upload-batch --account-name crutestreports --destination \$web/playwright-${{ parameters.environment }} --source "$(Pipeline.Workspace)/test-report/" --overwrite true
-              condition: and(succeededOrFailed(), ne(variables['Build.Reason'], 'PullRequest'))
+            - publish: playwright-report
+              displayName: Publish Playwright test report
+              artifact: test-report
+              condition: succeededOrFailed()
+  - job: Upload_E2E_Report
+    condition: and(succeededOrFailed(), ne(variables['Build.Reason'], 'PullRequest'))
+    dependsOn:
+      - Run_E2E_Tests
+    pool:
+      vmImage: ubuntu-20.04
+    steps:
+      - download: current
+        artifact: test-report
+      - task: AzureCLI@2
+        inputs:
+          azureSubscription: >-
+            Microsoft Azure - CRU Online Development
+            (bbe03d7e-0fe4-4f65-a765-9427e562b572)
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            az storage blob upload-batch --account-name crutestreports --destination \$web/playwright-${{ parameters.environment }} --source "$(Pipeline.Workspace)/test-report/" --overwrite true
