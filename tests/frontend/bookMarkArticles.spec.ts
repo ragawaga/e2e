@@ -20,7 +20,7 @@ test.describe("Article Bookmarks", () => {
 
     //Determine the state of the first bookmark
     const firstBookmark = page.getByTitle("Bookmark").first();
-    const selected: boolean =
+    const selected =
       (await firstBookmark.getAttribute(GlobalConstants.isSelectedAttribute)) === "true";
 
     //If unselected, select and check selected
@@ -35,6 +35,5 @@ test.describe("Article Bookmarks", () => {
       //Then assert it's now NOT seleted
       await expect(firstBookmark).toHaveAttribute(GlobalConstants.isSelectedAttribute, "false");
     }
-
   });
 });
