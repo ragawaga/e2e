@@ -35,13 +35,13 @@ test.describe("Downloads Page", () => {
 
   test("Click through get to downloads product page", async ({ page, downloadsMenuModel }) => {
      await page.goto("/downloads");
-     await downloadsMenuModel.downloadGroupList.first().click();
+     await downloadsMenuModel.downloadCategory0.getByRole('link').first().click();
      await expect(page).toHaveURL(new RegExp("/downloads/monitor"));
    });
 
    test("Downloads Edition Page contains Download files", async ({ page, downloadsMenuModel }) => {
     await page.goto("/downloads");
-    await downloadsMenuModel.downloadGroupList.first().click();
+    await downloadsMenuModel.downloadCategory0.getByRole('link').first().click();
     await expect(downloadsMenuModel.downloadGroupListItemTitle.first()).toBeVisible();
   });
 

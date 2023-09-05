@@ -7,7 +7,6 @@ export function DownloadsMenuPageModel(page: Page) {
     chwPageBanner: { testId: "chw-pagebanner" },
     downloadCategory0: { testId: "download-category__0-list" },
     downloadsHref: "#nav-menu-downloads",
-    downloadGroupList: '.downloads-group__list li a',
     downloadGroupListItemTitle: '.chw-archives-list__item__title'
   });
 
