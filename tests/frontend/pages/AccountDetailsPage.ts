@@ -3,6 +3,10 @@ import { createComponentLocators } from "../../component";
 
 export const accountDetailsConstants = {
   accountSettingsHeader: "Account Settings",
+  passedRuleClass: "passed",
+  oldPassword: "OldPassword123",
+  newPassword: "newPassword123&",
+  mismatchPassword: "newPassword123&**",
 };
 
 export function accountDetailsPageModel(page: Page) {
@@ -15,6 +19,8 @@ export function accountDetailsPageModel(page: Page) {
     newPassword: {testId : "input-newPassword"},
     confirmPassword: {testId : "input-confirmPassword"},
     changePasswordButton: {role: "button", name: "Change password"},
+    passwordRequirements: ".password-requirement",
+    passwordMismatchError: {testId : "chw-text-input-error"},
   });
 
   return {
