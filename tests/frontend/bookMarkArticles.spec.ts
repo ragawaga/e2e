@@ -24,10 +24,17 @@ test.describe("Article Bookmarks", () => {
       (await firstBookmark.getAttribute(GlobalConstants.isSelectedAttribute)) === "true";
 
     //If unselected, select and check selected
+    if (!selected) {
+      await firstBookmark.click();
+      //Then assert it's now seleted
+      await expect(firstBookmark).toHaveAttribute(GlobalConstants.isSelectedAttribute, "true");
+    }
     //Otherwise it was selected, so unselect and check unselected
-    const notSelectedStr: string = (!selected).toString()
-    await firstBookmark.click();
-    await expect(firstBookmark).toHaveAttribute(GlobalConstants.isSelectedAttribute, notSelectedStr);
+    else {
+      await firstBookmark.click();
+      //Then assert it's now NOT seleted
+      await expect(firstBookmark).toHaveAttribute(GlobalConstants.isSelectedAttribute, "false");
+    }
 
   });
 });
