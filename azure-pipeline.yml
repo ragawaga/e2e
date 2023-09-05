@@ -33,6 +33,11 @@ jobs:
           steps:
             - checkout: self
             - task: DownloadSecureFile@1
+              name: globalConfiguration
+              displayName: Download global configuration
+              inputs:
+                secureFile: '.env.all.local'
+            - task: DownloadSecureFile@1
               name: environmentConfiguration
               displayName: Download environment configuration
               inputs:
@@ -40,6 +45,8 @@ jobs:
             - script: |
                 echo Installing $(environmentConfiguration.secureFilePath) to current folder...
                 mv "$(environmentConfiguration.secureFilePath)" .
+                echo Installing $(globalConfiguration.secureFilePath) to current folder...
+                mv "$(globalConfiguration.secureFilePath)" .
               displayName: Setup environment configuration
             - task: Bash@3
               displayName: Run Playwright tests
@@ -47,6 +54,10 @@ jobs:
                 CI: true
                 SLACK_TOKEN: $(SLACK_TOKEN)
                 SLACK_CHANNEL: $(SLACK_CHANNEL)
+                ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+                  SLACK_NOTIFY: false
+                ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
+                  SLACK_NOTIFY: true
                 PLAYWRIGHT_ENVIRONMENT: ${{ parameters.environment }}
               inputs:
                 targetType: inline
@@ -65,11 +76,11 @@ jobs:
                 testRunTitle: End-to-end Test Results
               condition: succeededOrFailed()
             - publish: playwright-report
-              displayName: Publish powershell scripts for later use
+              displayName: Publish Playwright test report
               artifact: test-report
               condition: succeededOrFailed()
   - job: Upload_E2E_Report
-    condition: always()
+    condition: and(succeededOrFailed(), ne(variables['Build.Reason'], 'PullRequest'))
     dependsOn:
       - Run_E2E_Tests
     pool:
@@ -86,4 +97,3 @@ jobs:
           scriptLocation: inlineScript
           inlineScript: |
             az storage blob upload-batch --account-name crutestreports --destination \$web/playwright-${{ parameters.environment }} --source "$(Pipeline.Workspace)/test-report/" --overwrite true
-        condition: succeededOrFailed()

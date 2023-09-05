@@ -1,5 +1,4 @@
 import { expect, test } from "@playwright/test";
-import { asAuthenticatedUser } from "../../../auth";
 
 const _downloads_group_list_li_a = ".downloads-group__list > li > a";
 const _attachment_card_title_button = ".attachment-card__title > button";
@@ -36,7 +35,7 @@ test.describe("File downloads", () => {
 
         cy.readFile(
           "cypress/downloads/" + fileName.replace(/\s+/g, "-").toLowerCase(),
-          null,
+          null
         ).should((buffer) => {
           console.log("Buffer length:- ", buffer.length);
           expect(buffer.length).to.be.gt(14000); //an empty .xlsx file is ~ 14000 bytes/14 KB
@@ -48,7 +47,7 @@ test.describe("File downloads", () => {
     page,
   }) => {
     await page.goto(
-      "/analysis/article/141546/turbulent-times-ahead-as-alumina-trades-higher",
+      "/analysis/article/141546/turbulent-times-ahead-as-alumina-trades-higher"
     );
 
     page
@@ -64,7 +63,7 @@ test.describe("File downloads", () => {
         cy.readFile(
           "cypress/downloads/" +
             fileName.replace(/\s+/g, "-").toLowerCase() +
-            ".xlsx",
+            ".xlsx"
         ).should((buffer) => {
           console.log("Buffer length:- ", buffer.length);
           expect(buffer.length).to.be.gt(14000); //an empty .xlsx file is ~ 14000 bytes/14 KB
@@ -86,7 +85,7 @@ test.describe("File downloads", () => {
         (buffer) => {
           console.log("Buffer length:- ", buffer.length);
           expect(buffer.length).to.be.gt(14000); //an empty .xlsx file is ~ 14000 bytes/14 KB
-        },
+        }
       );
     });
   });

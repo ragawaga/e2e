@@ -1,13 +1,13 @@
-import { expect, test as base, Page } from "@playwright/test";
-import { articlePageModel } from "./pages/ArticlePage";
+import { expect } from "@playwright/test";
 import { createTestFixture } from "../fixture";
+import { articlePageModel } from "./pages/ArticlePage";
 
 const test = createTestFixture("article", articlePageModel);
 
 test.describe("Article Screen", () => {
-  test("should have a body and header", async ({ article, page }) => {
+  test("should have a body and header", async ({ article, page, layout }) => {
     await page.goto("/analysis/article/143080");
-    await expect(article.header).toBeVisible();
+    await expect(layout.header).toBeVisible();
     await expect(article.content).toBeVisible();
   });
 
@@ -19,7 +19,7 @@ test.describe("Article Screen", () => {
 
     test("article does not contain an author", async ({ article }) => {
       await article.load(132643);
-      await expect(article.authors).not.toBeVisible();
+      await expect(article.authors).toBeHidden();
     });
   });
 
@@ -36,12 +36,12 @@ test.describe("Article Screen", () => {
   });
 
   test.describe("media", () => {
-    test("article contains document links", async ({ article, page }) => {
+    test("article contains document links", async ({ article }) => {
       await article.load(142709);
       await expect(article.attachments).toHaveCount(2);
     });
 
-    test("article contains image", async ({ article, page }) => {
+    test("article contains image", async ({ article }) => {
       await article.load(139961);
       await expect(article.content.locator("img").first()).toBeVisible();
     });

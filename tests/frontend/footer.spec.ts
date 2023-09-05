@@ -11,7 +11,7 @@ test.describe("Footer", () => {
     const privacyPolicy = layout.footer.getByRole("link", {
       name: "Privacy Policy",
     });
-    
+
     const termsAndConditions = layout.footer.getByRole("link", {
       name: "General Terms & Conditions",
     });

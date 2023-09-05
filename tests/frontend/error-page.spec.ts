@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test.describe("Error pages", () => {
   test("should have the correct messages on them", async ({ page }) => {
-    await page.route("**/api/Article/*", async (route, request) => {
+    await page.route("**/api/Article/*", async (route) => {
       await route.fulfill({
         status: 404,
         headers: {

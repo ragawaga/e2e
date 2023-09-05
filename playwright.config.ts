@@ -1,15 +1,35 @@
 import { PlaywrightTestConfig, defineConfig, devices } from "@playwright/test";
-import { umbracoSessionFile, frontendSessionFile } from "./tests/auth";
 import dotenv from "dotenv";
 import dotenvExpand from "dotenv-expand";
+import { frontendSessionFile, umbracoSessionFile } from "./tests/auth";
 
 const environment = process.env.PLAYWRIGHT_ENVIRONMENT ?? "dev";
+
+const localAllEnvsConfig = dotenv.config({ path: `.env.all.local` });
+dotenvExpand.expand(localAllEnvsConfig);
 
 const localConfig = dotenv.config({ path: `.env.${environment}.local` });
 dotenvExpand.expand(localConfig);
 
 const environmentConfig = dotenv.config({ path: `.env.${environment}` });
-dotenvExpand.expand(environmentConfig);
+const environmentConfigResult = dotenvExpand.expand(environmentConfig);
+
+let hasConfigError = false;
+for (const key in environmentConfigResult.parsed) {
+  const value = environmentConfigResult.parsed[key];
+
+  // Variables were never interpolated
+  if (!value) {
+    console.info(`No value found for ${key}`);
+    hasConfigError = true;
+  }
+}
+
+if (hasConfigError) {
+  throw new Error(
+    `Unable to load configuration. Does .env.all.local or .env.${environment}.local exist?`
+  );
+}
 
 const reporters: PlaywrightTestConfig["reporter"] = [
   ["html", { outputFolder: "playwright-report" }],
@@ -23,8 +43,12 @@ if (process.env.CI) {
       {
         token: process.env.SLACK_TOKEN,
         channel: process.env.SLACK_CHANNEL,
-        notifiedUsers: [/* garytierney */ "U5YN0B43S", /* Christine */ "U23H8R73J"],
-        notifyOnlyOnFailure: false,
+        notify: process.env.SLACK_NOTIFY === "true",
+        notifiedUsers: [
+          /* garytierney */ "U5YN0B43S",
+          /* Christine */ "U23H8R73J",
+        ],
+        notifyOnlyOnFailure: true,
       },
     ],
     ["dot"]
@@ -46,7 +70,7 @@ export default defineConfig({
      * For example in `await expect(locator).toHaveText();`
      */
 
-    timeout: 5000,
+    timeout: 10_000,
   },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,

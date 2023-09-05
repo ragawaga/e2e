@@ -11,6 +11,8 @@ test.describe("Licence Terms and Conditions Screen", () => {
     // Check main heading is there within page banner
     await expect(layout.header).toHaveText("License Terms and Conditions");
 
-    await expect(page.getByText("PRODUCT LICENCE", { exact: true })).toBeAttached();
+    await expect(
+      page.getByText("PRODUCT LICENCE", { exact: true }),
+    ).toBeAttached();
   });
 });
