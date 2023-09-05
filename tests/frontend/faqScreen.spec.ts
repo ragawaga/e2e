@@ -21,7 +21,7 @@ test.describe("FAQ Screen", () => {
     await expect(page).toHaveURL(/help*/);
 
     //Check banner is there, and contains 'User guides'
-    await expect(layout.header).toContainText(faqConstants.faqHeader);
+    await expect(layout.header).toHaveText(faqConstants.faqHeader);
 
     //Check tabs are there. First tab should be 'User guides'
     await expect(page.getByRole("tablist").first()).toContainText(
