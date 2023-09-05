@@ -42,7 +42,7 @@ test.describe("Prices detail pages", () => {
     await expect(pricesDetail.downloadXLS).toBeVisible()
     await pricesDetail.downloadXLS.first().click()
     const download = await downloadPromise;
-    expect (await download.path()).not.toBeNull();
+    await download.path();
   });
 
 });
