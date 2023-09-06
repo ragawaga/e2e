@@ -45,4 +45,34 @@ test.describe("Prices detail pages", () => {
     await download.path();
   });
 
+  test("Content Controls buttons", async ({ pricesDetail }) => {
+    await pricesDetail.load(1001);
+
+    await expect(pricesDetail.printButton).toBeAttached();
+    await expect(pricesDetail.myPricesButton).toBeAttached();
+    await expect(pricesDetail.myPricesButton.getAttribute('href')).toContain(''));
+
+  });
+
+  test("Display Price Analysis and Price News Articles", async ({ pricesDetail }) => {
+    await pricesDetail.load(1001);
+
+    // There should be 3 Analysis and 5 News Articles
+    await expect(pricesDetail.analysisArticles).toHaveCount(3);
+    await expect(pricesDetail.newsArticles).toHaveCount(5);
+
+  });
+
+  test("The relevant fields and controls should be displayed", async ({ pricesDetail }) => {
+    await pricesDetail.load(1001);
+
+    // Analysis should have teaser, News should not
+    (await pricesDetail.analysisArticles.all()).forEach((el) => {
+      expect(el.getByTestId('teaser')).toBeAttached();
+    });
+    (await pricesDetail.newsArticles.all()).forEach((el) => {
+      expect(el.getByTestId('teaser')).not.toBeAttached();
+    });
+  });
+
 });
