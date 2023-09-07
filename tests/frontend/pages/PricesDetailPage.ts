@@ -10,8 +10,8 @@ export function pricesDetailPageModel(page: Page) {
     pricesTable: { testId: "prices-table" },
     chartDlMenu: { role: 'button', name: /view chart menu/i },
     downloadXLS: { text: /download xls/i },
-    analysisArticles: ".article-stream-list",
-    newsArticles: { testId: ".article-stream-list-no-teaser" },
+    analysisArticles: { testId: "price-detail-analysis" },
+    newsArticles: { testId: "price-detail-news" },
   });
 
   return {

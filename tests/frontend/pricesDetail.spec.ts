@@ -4,9 +4,11 @@ import { createTestFixture } from "../fixture";
 
 import { pricesDetailPageModel } from "./pages/PricesDetailPage";
 
+import { GlobalConstants } from "./pages/Layout";
+
 const test = createTestFixture("pricesDetail", pricesDetailPageModel)
 
-test.describe("Prices detail pages", () => {
+test.describe("Price Detail page", () => {
   test("Display Ferromanganese price detail page", async ({ pricesDetail, layout }) => {
     await pricesDetail.load(543);
 
@@ -45,34 +47,70 @@ test.describe("Prices detail pages", () => {
     await download.path();
   });
 
-  test("Content Controls buttons", async ({ pricesDetail }) => {
+  test("Content Controls buttons are rendered and working", async ({ pricesDetail }) => {
     await pricesDetail.load(1001);
-
     await expect(pricesDetail.printButton).toBeAttached();
     await expect(pricesDetail.myPricesButton).toBeAttached();
-    await expect(pricesDetail.myPricesButton.getAttribute('href')).toContain(''));
-
+    expect(await pricesDetail.myPricesButton.getAttribute('href')).toContain('/mycru?tab=my-prices');
   });
 
-  test("Display Price Analysis and Price News Articles", async ({ pricesDetail }) => {
+  test("Display Price Analysis and Price News Articles with correct counts", async ({ pricesDetail }) => {
+    await pricesDetail.load(1001);
+    await expect(pricesDetail.analysisArticles.locator('article')).toHaveCount(20); // change this to 3
+    await expect(pricesDetail.newsArticles.locator('article')).toHaveCount(10); // change this to 5
+  });
+
+  test("Analysis Article relevant fields and controls should be displayed", async ({ pricesDetail }) => {
     await pricesDetail.load(1001);
 
-    // There should be 3 Analysis and 5 News Articles
-    await expect(pricesDetail.analysisArticles).toHaveCount(3);
-    await expect(pricesDetail.newsArticles).toHaveCount(5);
+    //Analysis should have teaser, 
+    const el = pricesDetail.analysisArticles.locator('article').first()
+    const platformTagsItem = el.locator('.platform-tags__list-item').first();
+    const headingLink = el.getByTestId('article-item-heading-link');
+    const teaser = el.getByTestId('teaser');
+    const date = el.locator('.chw-article-item__date');
+    const firstBookmark = el.getByTestId('bookmark_widget')
+
+    await expect(platformTagsItem).toHaveText(/analysis/i);
+    await expect(headingLink).toHaveText(/.+/i);
+    await expect(teaser).toHaveText(/.+/i);
+    await expect(date).toHaveText(/.+/i);
+    await expect(firstBookmark).toBeVisible();
+
+    const selectedNow = await firstBookmark.getAttribute(GlobalConstants.isSelectedAttribute) === "true";
+    const selectedAfterClick = (!selectedNow).toString();
+    await firstBookmark.click();
+    await expect(firstBookmark).toHaveAttribute(GlobalConstants.isSelectedAttribute, selectedAfterClick);
+  });
+
+  test("News Article relevant fields and controls should be displayed", async ({ pricesDetail }) => {
+  await pricesDetail.load(1001);
+
+    // News should not have teaser
+      const el = pricesDetail.newsArticles.locator('article').first();
+      const platformTagsItem = el.locator('.platform-tags__list-item').first();
+      const headingLink = el.getByTestId('article-item-heading-link');
+      const teaser = el.getByTestId('teaser');
+      const date = el.locator('.chw-article-item__date');
+      const firstBookmark = el.getByTestId('bookmark_widget')
+      
+      await expect(platformTagsItem).not.toHaveText(/analysis/i);
+      await expect(headingLink).toHaveText(/.+/i);
+      await expect(teaser).toHaveText('');
+      await expect(date).toHaveText(/.+/i);
+      await expect(firstBookmark).toBeVisible();
+
+      const selectedNow = await firstBookmark.getAttribute(GlobalConstants.isSelectedAttribute) === "true";
+      const selectedAfterClick = (!selectedNow).toString();
+      await firstBookmark.click();
+      await expect(firstBookmark).toHaveAttribute(GlobalConstants.isSelectedAttribute, selectedAfterClick);
 
   });
 
-  test("The relevant fields and controls should be displayed", async ({ pricesDetail }) => {
-    await pricesDetail.load(1001);
 
-    // Analysis should have teaser, News should not
-    (await pricesDetail.analysisArticles.all()).forEach((el) => {
-      expect(el.getByTestId('teaser')).toBeAttached();
-    });
-    (await pricesDetail.newsArticles.all()).forEach((el) => {
-      expect(el.getByTestId('teaser')).not.toBeAttached();
-    });
-  });
+
+  
+
+
 
 });
