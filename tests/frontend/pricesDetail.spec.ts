@@ -9,6 +9,7 @@ import { GlobalConstants } from "./pages/Layout";
 const test = createTestFixture("pricesDetail", pricesDetailPageModel)
 
 test.describe("Price Detail page", () => {
+  
   test("Display Ferromanganese price detail page", async ({ pricesDetail, layout }) => {
     await pricesDetail.load(543);
 
@@ -76,7 +77,12 @@ test.describe("Price Detail page", () => {
     await expect(teaser).toHaveText(/.+/i);
     await expect(date).toHaveText(/.+/i);
     await expect(firstBookmark).toBeVisible();
+  });
 
+  test("Analysis Article bookmark widget works", async ({ pricesDetail }) => {
+    await pricesDetail.load(1001);
+    const el = pricesDetail.analysisArticles.locator('article').first()
+    const firstBookmark = el.getByTestId('bookmark_widget')
     const selectedNow = await firstBookmark.getAttribute(GlobalConstants.isSelectedAttribute) === "true";
     const selectedAfterClick = (!selectedNow).toString();
     await firstBookmark.click();
@@ -99,12 +105,16 @@ test.describe("Price Detail page", () => {
       await expect(teaser).toHaveText('');
       await expect(date).toHaveText(/.+/i);
       await expect(firstBookmark).toBeVisible();
+  });
 
-      const selectedNow = await firstBookmark.getAttribute(GlobalConstants.isSelectedAttribute) === "true";
-      const selectedAfterClick = (!selectedNow).toString();
-      await firstBookmark.click();
-      await expect(firstBookmark).toHaveAttribute(GlobalConstants.isSelectedAttribute, selectedAfterClick);
-
+  test("News Article bookmark widget works", async ({ pricesDetail }) => {
+    await pricesDetail.load(1001);
+    const el = pricesDetail.newsArticles.locator('article').first()
+    const firstBookmark = el.getByTestId('bookmark_widget')
+    const selectedNow = await firstBookmark.getAttribute(GlobalConstants.isSelectedAttribute) === "true";
+    const selectedAfterClick = (!selectedNow).toString();
+    await firstBookmark.click();
+    await expect(firstBookmark).toHaveAttribute(GlobalConstants.isSelectedAttribute, selectedAfterClick);
   });
 
 
