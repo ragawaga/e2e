@@ -48,7 +48,6 @@ test.describe("a logged in user", () => {
     await page.goto(GlobalConstants.home);
 
     //Get the user menu, and click Account settings
-    //Get the user menu, and click Account settings
     await layout.userMenu.hover();
     await layout.accountSettingsLink.click();
 
