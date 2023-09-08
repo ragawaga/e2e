@@ -10,11 +10,11 @@ const test = createTestFixture("pricesDetail", pricesDetailPageModel)
 
 test.describe("Price Detail page", () => {
   
-  test("Display Ferromanganese price detail page", async ({ pricesDetail, layout }) => {
+  test("Display Ferromanganese price detail page", async ({ pricesDetail }) => {
     await pricesDetail.load(543);
 
     // Check the title
-    await expect(layout.header).toHaveText(/Ferromanganese EU MC/);
+    await expect(pricesDetail.pageHeading.getByRole('heading')).toHaveText(/Ferromanganese EU MC/);
     await expect(pricesDetail.contentHeading.first())
       .toHaveText("Latest Prices");
 
@@ -23,11 +23,11 @@ test.describe("Price Detail page", () => {
     await expect(pricesDetail.pricesTable).toHaveCount(2);
   });
 
-  test("Display Optical fibre price detail page", async ({ pricesDetail, layout }) => {
+  test("Display Optical fibre price detail page", async ({ pricesDetail }) => {
     await pricesDetail.load(1562);
 
     // Check the title
-    await expect(layout.header).toHaveText(/Bare Fibre/);
+    await expect(pricesDetail.pageHeading.getByRole('heading')).toHaveText(/Bare Fibre/);
     await expect(pricesDetail.contentHeading.first())
       .toHaveText("Latest Prices");
 

@@ -3,6 +3,7 @@ import { createComponentLocators } from "../../component";
 
 export function pricesDetailPageModel(page: Page) {
   const screen = createComponentLocators(page, {
+    pageHeading: { testId: 'chw-pagebanner_background'},
     contentHeading: { testId: "content-heading" },
     myPricesButton: { role: 'link', name: /my prices/i },
     printButton: { role: 'button', name: /print/i },
