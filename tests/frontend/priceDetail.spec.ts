@@ -57,8 +57,8 @@ test.describe("Price Detail page", () => {
 
   test("Display Price Analysis and Price News Articles with correct counts", async ({ priceDetail }) => {
     await priceDetail.load(1001);
-    await expect(priceDetail.analysisArticles.locator('article')).toHaveCount(20); // change this to 3
-    await expect(priceDetail.newsArticles.locator('article')).toHaveCount(10); // change this to 5
+    await expect(priceDetail.analysisArticles.locator('article')).toHaveCount(3);
+    await expect(priceDetail.newsArticles.locator('article')).toHaveCount(5);
   });
 
   test("Analysis Article relevant fields and controls should be displayed", async ({ priceDetail }) => {
