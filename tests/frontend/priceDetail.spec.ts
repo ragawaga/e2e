@@ -117,10 +117,4 @@ test.describe("Price Detail page", () => {
     await expect(firstBookmark).toHaveAttribute(GlobalConstants.isSelectedAttribute, selectedAfterClick);
   });
 
-
-
-  
-
-
-
 });
