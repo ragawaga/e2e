@@ -23,6 +23,7 @@ export function layoutPageModel(page: Page) {
     footer: "#chw-footer",
     accountSettingsLink: { role: "link", name: "Account Settings" },
     helpLink: { role: "link", name: "Help" },
+    printIcon: { role: "button", name: "Print" },
   });
 
 }
