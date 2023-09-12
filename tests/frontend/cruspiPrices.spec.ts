@@ -1,27 +1,27 @@
 import { expect } from "@playwright/test";
-import { GlobalConstants } from "./pages/Layout";
-import { cruspiPricesPageModel } from "./pages/CruspiPricesPage";
 import { createTestFixture } from "../fixture";
+import { cruspiPricesPageModel } from "./pages/CruspiPricesPage";
+import { GlobalConstants } from "./pages/Layout";
 
 const test = createTestFixture("cruspiPriceModel", cruspiPricesPageModel);
 
 test.describe("CRUSpi Prices Page", () => {
 
-  test("can navigate straight to the correct URL", async ({ page, layout, cruspiPriceModel  }) => {
+  test("can navigate straight to the correct URL", async ({ layout, cruspiPriceModel  }) => {
     await cruspiPriceModel.load();
-    expect(await layout.header.textContent()).toEqual(GlobalConstants.cruspiString);
+    await expect(layout.header).toHaveText(GlobalConstants.cruspiString);
   });
 
   test("can navigate to cruspi prices page via the Prices menu", async ({ page, layout  }) => {
     await page.goto("/analysis");
     await layout.pricesTopNav.hover();
     await layout.cruspiMenuItem.click();
-    expect(await layout.header.textContent()).toEqual(GlobalConstants.cruspiString);
+    await expect(layout.header).toHaveText(GlobalConstants.cruspiString);
   });
 
   test("there are no tabs on the CRUSpi page and page structure is as expected", async ({ page, layout, cruspiPriceModel  }) => {
     await cruspiPriceModel.load();
-    expect(await layout.header.textContent()).toEqual(GlobalConstants.cruspiString);
+    await expect(layout.header).toHaveText(GlobalConstants.cruspiString);
 
     //Check the Article content is there
     await expect(page.getByText('Price Indicators', { exact: true })).toBeVisible();

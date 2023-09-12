@@ -1,7 +1,7 @@
 import { expect } from "@playwright/test";
-import { GlobalConstants } from "./pages/Layout";
-import { cruspiDownloadsPageModel } from "./pages/CruspiDownloadsPage";
 import { createTestFixture } from "../fixture";
+import { cruspiDownloadsPageModel } from "./pages/CruspiDownloadsPage";
+import { GlobalConstants } from "./pages/Layout";
 
 const test = createTestFixture("cruspiDownloadsModel", cruspiDownloadsPageModel);
 
@@ -39,6 +39,6 @@ test.describe("CRUSpi Downloads Page", () => {
     await excelFileButton.hover();
     excelFileButton.click();
     const download = await downloadPromise;
-    expect (await download.path()).not.toBeNull;
+    expect (await download.path()).not.toBeNull();
   });
 })
