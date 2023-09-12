@@ -52,13 +52,13 @@ test.describe("Price Detail page", () => {
     await priceDetail.load(1001);
     await expect(priceDetail.printButton).toBeAttached();
     await expect(priceDetail.myPricesButton).toBeAttached();
-    expect(await priceDetail.myPricesButton.getAttribute('href')).toContain(priceDetailConstants.text.myCruURL);
+    await expect(priceDetail.myPricesButton).toHaveAttribute('href', priceDetailConstants.text.myCruURL);
   });
 
   test("Display Price Analysis and Price News Articles with correct counts", async ({ priceDetail }) => {
     await priceDetail.load(1001);
-    await expect(priceDetail.analysisArticles.locator(priceDetailConstants.css.article)).toHaveCount(3);
-    await expect(priceDetail.newsArticles.locator(priceDetailConstants.css.article)).toHaveCount(5);
+    await expect(priceDetail.analysisArticles.locator(priceDetailConstants.css.article)).toHaveCount(priceDetailConstants.number.priceAnalysisArticleCount);
+    await expect(priceDetail.newsArticles.locator(priceDetailConstants.css.article)).toHaveCount(priceDetailConstants.number.priceNewsArticleCount);
   });
 
   test("Analysis Article relevant fields and controls should be displayed", async ({ priceDetail }) => {

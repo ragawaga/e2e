@@ -7,6 +7,10 @@ export const priceDetailConstants = {
     articleItemDate: '.chw-article-item__date',
     platformTags: '.platform-tags__list-item',
   },
+  number: {
+    priceAnalysisArticleCount: 3,
+    priceNewsArticleCount: 5
+  },
   testId: {
     articleItemHeadingLink: 'article-item-heading-link',
     bookmarkWidget: 'bookmark_widget',
