@@ -14,6 +14,14 @@ test.describe("Dashboard", () => {
         await expect(dashboard.header).toBeVisible();
     });
 
+    // test("Clicking to edit an article", async ({dashboard}) => {
+    //     const firstTitleEl = dashboard.muiDataGridRow.first().locator('a');
+    //     const firstRowDataId = await dashboard.muiDataGridRow.first().getAttribute(dashboardConstants.text.dataAttribute) as string;
+    //     await firstTitleEl.click();
+    //     await expect(dashboard.editHeader).toBeVisible();
+    //     await expect(dashboard.editPreview).toHaveAttribute('href', `/analysis/article/${firstRowDataId}/preview`)
+    // });
+
 });
 
 test.describe("Paginator", () => {
@@ -32,16 +40,16 @@ test.describe("Paginator", () => {
     });
 
     test("Next button loads different articles", async ({dashboard}) => {
-        const firstTitlePage1 = await dashboard.muiDataGridRow.first().getAttribute(dashboardConstants.text.dataAttribute) as string;
+        const firstRowDataId = await dashboard.muiDataGridRow.first().getAttribute(dashboardConstants.text.dataAttribute) as string;
         await dashboard.nextButton.click();
-        await expect(dashboard.muiDataGridRow.first()).not.toHaveAttribute(dashboardConstants.text.dataAttribute, firstTitlePage1)
+        await expect(dashboard.muiDataGridRow.first()).not.toHaveAttribute(dashboardConstants.text.dataAttribute, firstRowDataId)
     });
 
     test("Previous button reloads first page articles", async ({dashboard}) => {
-        const firstTitlePage1 = await dashboard.muiDataGridRow.first().getAttribute(dashboardConstants.text.dataAttribute) as string;
+        const firstRowDataId = await dashboard.muiDataGridRow.first().getAttribute(dashboardConstants.text.dataAttribute) as string;
         await dashboard.nextButton.click();
         await dashboard.prevButton.click()
-        await expect(dashboard.muiDataGridRow.first()).toHaveAttribute(dashboardConstants.text.dataAttribute, firstTitlePage1)
+        await expect(dashboard.muiDataGridRow.first()).toHaveAttribute(dashboardConstants.text.dataAttribute, firstRowDataId)
     });
 
     test("Paginator buttons page 2 state", async ({dashboard}) => {

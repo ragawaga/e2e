@@ -20,7 +20,9 @@ export function dashboardPageModel(page: Page) {
     prevButton: { role: "button", name: /go to previous page/i },
     muiDataGridRow: '.MuiDataGrid-row',
     rowsPerPageSelect: { role: "button", name: `Rows per page: ${dashboardConstants.number.rowsPerPageDefault.toString()}` },
-    rowsPerPageOption0: { role: "option", name: dashboardConstants.number.rowsPerPageOption0.toString()}
+    rowsPerPageOption0: { role: "option", name: dashboardConstants.number.rowsPerPageOption0.toString()},
+    editHeader: { role: "heading", name: "Editor UI Dashboard" },
+    editPreview: { role: "link", name: /preview/i },
   });
 
   return {
@@ -31,3 +33,5 @@ export function dashboardPageModel(page: Page) {
     ...screen,
   };
 }
+
+
