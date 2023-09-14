@@ -18,10 +18,11 @@ export const priceDetailConstants = {
   },
   text: {
     anyText: /.+/i,
-    analysisPlatformTagValue: /analysis/i,
+    analysisPlatformTagValues: /analysis|markets/i,
     emptyStr: '',
     firstRowHeading: 'Latest Prices',
     myCruURL: '/mycru?tab=my-prices',
+    newsPlatformTagValues: /news/i,
     price543Title: /Ferromanganese EU MC/,
     price1562Title: /Bare Fibre/,
     true: "true",

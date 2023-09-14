@@ -72,7 +72,7 @@ test.describe("Price Detail page", () => {
     const date = el.locator(priceDetailConstants.css.articleItemDate);
     const firstBookmark = el.getByTestId(priceDetailConstants.testId.bookmarkWidget);
 
-    await expect(platformTagsItem).toHaveText(priceDetailConstants.text.analysisPlatformTagValue);
+    await expect(platformTagsItem).toHaveText(priceDetailConstants.text.analysisPlatformTagValues);
     await expect(headingLink).toHaveText(priceDetailConstants.text.anyText);
     await expect(teaser).toHaveText(priceDetailConstants.text.anyText);
     await expect(date).toHaveText(priceDetailConstants.text.anyText);
@@ -100,7 +100,7 @@ test.describe("Price Detail page", () => {
       const date = el.locator(priceDetailConstants.css.articleItemDate);
       const firstBookmark = el.getByTestId(priceDetailConstants.testId.bookmarkWidget)
       
-      await expect(platformTagsItem).not.toHaveText(priceDetailConstants.text.analysisPlatformTagValue);
+      await expect(platformTagsItem).toHaveText(priceDetailConstants.text.newsPlatformTagValues);
       await expect(headingLink).toHaveText(priceDetailConstants.text.anyText);
       await expect(teaser).toHaveText(priceDetailConstants.text.emptyStr);
       await expect(date).toHaveText(priceDetailConstants.text.anyText);
