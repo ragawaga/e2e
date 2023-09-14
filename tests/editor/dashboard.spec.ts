@@ -14,13 +14,13 @@ test.describe("Dashboard", () => {
         await expect(dashboard.header).toBeVisible();
     });
 
-    // test("Clicking to edit an article", async ({dashboard}) => {
-    //     const firstTitleEl = dashboard.muiDataGridRow.first().locator('a');
-    //     const firstRowDataId = await dashboard.muiDataGridRow.first().getAttribute(dashboardConstants.text.dataAttribute) as string;
-    //     await firstTitleEl.click();
-    //     await expect(dashboard.editHeader).toBeVisible();
-    //     await expect(dashboard.editPreview).toHaveAttribute('href', `/analysis/article/${firstRowDataId}/preview`)
-    // });
+    test("Clicking to edit an article", async ({dashboard}) => {
+        const firstTitleEl = dashboard.muiDataGridRow.first().locator('a');
+        const firstRowDataId = await dashboard.muiDataGridRow.first().getAttribute(dashboardConstants.text.dataAttribute) as string;
+        await firstTitleEl.click();
+        await expect(dashboard.editHeader).toBeVisible();
+        await expect(dashboard.editPreview).toHaveAttribute('href', new RegExp(firstRowDataId, "i"));
+    });
 
 });
 

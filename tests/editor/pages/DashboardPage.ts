@@ -21,7 +21,7 @@ export function dashboardPageModel(page: Page) {
     muiDataGridRow: '.MuiDataGrid-row',
     rowsPerPageSelect: { role: "button", name: `Rows per page: ${dashboardConstants.number.rowsPerPageDefault.toString()}` },
     rowsPerPageOption0: { role: "option", name: dashboardConstants.number.rowsPerPageOption0.toString()},
-    editHeader: { role: "heading", name: "Editor UI Dashboard" },
+    editHeader: { role: "heading", name: "Editor UI Edit Article" },
     editPreview: { role: "link", name: /preview/i },
   });
 
