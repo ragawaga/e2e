@@ -1,7 +1,11 @@
 import { Page } from "@playwright/test";
 import { createComponentLocators } from "../../component";
 
-export function articlePageModel(page: Page) {
+export const notificationArticleConstants = {
+  articleWithAuthorAndTags : 141704,
+  articleWithoutAuthor: 150848
+};
+export function notificationsArticlePageModel(page: Page) {
   const screen = createComponentLocators(page, {
     content: { testId: "article-content" },
     authors: { testId: "author-container" },
@@ -11,12 +15,12 @@ export function articlePageModel(page: Page) {
     topicTags: { testId: "topic-tags" },
     featuredArticles: ".featured-article-card",
     attachments: ".attachment-card",
-    numberOfArticles: "20",
+    articleDate: { testId: "article-date" },
   });
 
   return {
     async load(id: number) {
-      await page.goto(`/analysis/article/${id}/`);
+      await page.goto(`/notifications/article/${id}/`);
     },
     ...screen,
   };
