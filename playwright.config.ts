@@ -1,7 +1,11 @@
 import { PlaywrightTestConfig, defineConfig, devices } from "@playwright/test";
 import dotenv from "dotenv";
 import dotenvExpand from "dotenv-expand";
-import { frontendSessionFile, umbracoSessionFile } from "./tests/auth";
+import {
+  frontendRestrictedSessionFile,
+  frontendSessionFile,
+  umbracoSessionFile,
+} from "./tests/auth";
 
 const environment = process.env.PLAYWRIGHT_ENVIRONMENT ?? "dev";
 
@@ -102,6 +106,14 @@ export default defineConfig({
       },
     },
     {
+      name: "frontend-restricted-setup",
+      testMatch: /frontend-restricted\.setup\.ts/,
+      testDir: "./tests/setup",
+      use: {
+        baseURL: process.env.FRONTEND_BASE_URL,
+      },
+    },
+    {
       name: "editor-setup",
       testMatch: /editor\.setup\.ts/,
       testDir: "./tests/setup",
@@ -116,8 +128,21 @@ export default defineConfig({
         baseURL: process.env.FRONTEND_BASE_URL,
         storageState: frontendSessionFile,
       },
+      grepInvert: /@restricted/,
       testDir: "./tests/frontend",
       dependencies: ["frontend-setup"],
+      testMatch: /.*\.spec\.ts/,
+    },
+    {
+      name: "frontend-restricted",
+      use: {
+        ...devices["Desktop Chrome"],
+        baseURL: process.env.FRONTEND_BASE_URL,
+        storageState: frontendRestrictedSessionFile,
+      },
+      grepInvert: /@unrestricted/,
+      testDir: "./tests/frontend",
+      dependencies: ["frontend-restricted-setup"],
       testMatch: /.*\.spec\.ts/,
     },
     {
