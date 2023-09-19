@@ -28,7 +28,6 @@ test.describe("Downloads Page", () => {
     //get the name of the file for use later
     let firstFileText = await firstFile.innerText();
     //click the file to open in a new tab
-    //downloadsModel.downloadGroupListItemTitle.first().click();
     firstFile.click();
     //the promise is for the popup new tab event and will wait fro the new tab opening before proceeding
     const newTabPromise = page.waitForEvent("popup");
