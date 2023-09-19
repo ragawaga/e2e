@@ -1,6 +1,10 @@
 import { Page } from "@playwright/test";
 import { createComponentLocators } from "../../component";
 
+export const DownloadsPageConstants = {
+  aboutBlank: "about:blank"
+};
+
 export function DownloadsPageModel(page: Page) {
   const screen = createComponentLocators(page, {
     header: "h1",

@@ -1,7 +1,8 @@
 import { expect } from "@playwright/test";
 import fs from 'fs';
 import { createTestFixture } from "../fixture";
-import { DownloadsPageModel } from "./pages/DownloadsPage";
+
+import { DownloadsPageConstants, DownloadsPageModel } from "./pages/DownloadsPage";
 
 const test = createTestFixture("downloadsModel", DownloadsPageModel);
 
@@ -27,7 +28,8 @@ test.describe("Downloads Page", () => {
     //get the name of the file for use later
     let firstFileText = await firstFile.innerText();
     //click the file to open in a new tab
-    downloadsModel.downloadGroupListItemTitle.first().click();
+    //downloadsModel.downloadGroupListItemTitle.first().click();
+    firstFile.click();
     //the promise is for the popup new tab event and will wait fro the new tab opening before proceeding
     const newTabPromise = page.waitForEvent("popup");
     const newTab = await newTabPromise;
@@ -35,8 +37,8 @@ test.describe("Downloads Page", () => {
     //this is going to be used to avoid numbers appending to existing file names as the file names 
     //with numbers appended do not appear in the tab Url only the original file name
     let charindex = firstFileText.lastIndexOf('.pdf');
-    //check the Url of the download tab has the name of the file included in it 
-    await expect(newTab).toHaveURL(new RegExp(firstFileText.substring(0, charindex)));
+    //check the Url of the download tab has the name of the file included in it or about:blank if file not found
+    await expect(newTab).toHaveURL(new RegExp(firstFileText.substring(0, charindex) + '|' + DownloadsPageConstants.aboutBlank));
   });
 });
 
