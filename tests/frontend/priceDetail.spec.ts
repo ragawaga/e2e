@@ -10,7 +10,7 @@ const test = createTestFixture("priceDetail", priceDetailPageModel)
 
 test.describe("Price Detail page", () => {
   
-  test("Display Ferromanganese price detail page", async ({ priceDetail }) => {
+  test("Display Ferromanganese price detail page @unrestricted", async ({ priceDetail }) => {
     await priceDetail.load(543);
 
     // Check the title
@@ -23,7 +23,7 @@ test.describe("Price Detail page", () => {
     await expect(priceDetail.pricesTable).toHaveCount(2);
   });
 
-  test("Display Optical fibre price detail page", async ({ priceDetail }) => {
+  test("Display Optical fibre price detail page @unrestricted", async ({ priceDetail }) => {
     await priceDetail.load(1562);
 
     // Check the title
@@ -48,20 +48,20 @@ test.describe("Price Detail page", () => {
     await download.path();
   });
 
-  test("Content Controls buttons are rendered and working", async ({ priceDetail }) => {
+  test("Content Controls buttons are rendered and working @unrestricted", async ({ priceDetail }) => {
     await priceDetail.load(1001);
     await expect(priceDetail.printButton).toBeAttached();
     await expect(priceDetail.myPricesButton).toBeAttached();
     await expect(priceDetail.myPricesButton).toHaveAttribute('href', priceDetailConstants.text.myCruURL);
   });
 
-  test("Display Price Analysis and Price News Articles with correct counts", async ({ priceDetail }) => {
+  test("Display Price Analysis and Price News Articles with correct counts @unrestricted", async ({ priceDetail }) => {
     await priceDetail.load(1001);
     await expect(priceDetail.analysisArticles.locator(priceDetailConstants.css.article)).toHaveCount(priceDetailConstants.number.priceAnalysisArticleCount);
     await expect(priceDetail.newsArticles.locator(priceDetailConstants.css.article)).toHaveCount(priceDetailConstants.number.priceNewsArticleCount);
   });
 
-  test("Analysis Article relevant fields and controls should be displayed", async ({ priceDetail }) => {
+  test("Analysis Article relevant fields and controls should be displayed @unrestricted", async ({ priceDetail }) => {
     await priceDetail.load(1001);
 
     //Analysis should have teaser, 
@@ -79,7 +79,7 @@ test.describe("Price Detail page", () => {
     await expect(firstBookmark).toBeVisible();
   });
 
-  test("Analysis Article bookmark widget works", async ({ priceDetail }) => {
+  test("Analysis Article bookmark widget works @unrestricted", async ({ priceDetail }) => {
     await priceDetail.load(1001);
     const el = priceDetail.analysisArticles.locator(priceDetailConstants.css.article).first()
     const firstBookmark = el.getByTestId(priceDetailConstants.testId.bookmarkWidget)
@@ -89,7 +89,7 @@ test.describe("Price Detail page", () => {
     await expect(firstBookmark).toHaveAttribute(GlobalConstants.isSelectedAttribute, selectedAfterClick);
   });
 
-  test("News Article relevant fields and controls should be displayed", async ({ priceDetail }) => {
+  test("News Article relevant fields and controls should be displayed @unrestricted", async ({ priceDetail }) => {
   await priceDetail.load(1001);
 
     // News should not have teaser
@@ -107,7 +107,7 @@ test.describe("Price Detail page", () => {
       await expect(firstBookmark).toBeVisible();
   });
 
-  test("News Article bookmark widget works", async ({ priceDetail }) => {
+  test("News Article bookmark widget works @unrestricted", async ({ priceDetail }) => {
     await priceDetail.load(1001);
     const el = priceDetail.newsArticles.locator(priceDetailConstants.css.article).first()
     const firstBookmark = el.getByTestId(priceDetailConstants.testId.bookmarkWidget)

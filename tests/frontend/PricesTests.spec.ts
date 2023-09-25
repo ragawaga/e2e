@@ -12,12 +12,12 @@ test.describe("Prices Tests", () => {
     await expect(layout.pricesTopNav).toBeVisible(); 
   });
 
-  test("Navigate to price page", async ({ prices, page, layout })  => {
+  test("Navigate to price page @unrestricted", async ({ prices, page, layout })  => {
     prices.load(pricePageConstants.aluminiumURL);
     await expect(layout.header).toHaveText(pricePageConstants.aluminiumPageHeader);
   });
 
-  test("Can click ranges changes state", async ({ prices })  => {
+  test("Can click ranges changes state @unrestricted", async ({ prices })  => {
     prices.load(pricePageConstants.aluminiumURL);
 
     //Check we are on the Overview tab
@@ -35,7 +35,7 @@ test.describe("Prices Tests", () => {
     await expect(prices.downloadTableButton).toBeVisible();
   });
 
-  test("Prices table and download button exists on Weekly and Monthly", async ({ prices })  => {
+  test("Prices table and download button exists on Weekly and Monthly @unrestricted", async ({ prices })  => {
     prices.load(pricePageConstants.aluminiumURL);
 
     //Navigate to the weekly tab and check donwload option and the table are there
@@ -49,7 +49,7 @@ test.describe("Prices Tests", () => {
     await expect(prices.downloadTableButton).toBeVisible();
   });
 
-  test("Fertilizer Week Prices has nutrient filter", async ({ prices, page, layout })  => {
+  test("Fertilizer Week Prices has nutrient filter @unrestricted", async ({ prices, page, layout })  => {
     prices.load(pricePageConstants.fwURL);
 
     //Should be on FW page initally

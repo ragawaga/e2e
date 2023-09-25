@@ -6,7 +6,7 @@ const test = createTestFixture("emailPrefsModel", emailPrefsPageModel);
 
 test.describe("Email preferences Screen", () => {
 
-  test("should have the correct Email Preferences page structure", async ({
+  test("should have the correct Email Preferences page structure @unrestricted", async ({
     page, layout, emailPrefsModel
   }) => {
 
@@ -42,7 +42,7 @@ test.describe("Email preferences Screen", () => {
     await expect(page.getByText(emailPrefsConstants.explanatoryText)).toBeVisible();
   });
 
-  test("can navigate directly to the page tab via URL", async ({
+  test("can navigate directly to the page tab via URL @unrestricted", async ({
     emailPrefsModel
   }) => {
 
