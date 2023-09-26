@@ -1,3 +1,17 @@
+resources:
+  pipelines:
+    - pipeline: dev-deploy
+      source: dev-deployment-cd
+      trigger: true
+
+    - pipeline: prod-deploy
+      source: deployment-all
+      trigger:
+        stages:
+          - U4
+          - U5
+          - PROD
+
 schedules:
   - cron: '0 18 * * *'
     displayName: 6pm build
