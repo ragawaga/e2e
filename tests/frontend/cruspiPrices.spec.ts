@@ -7,19 +7,19 @@ const test = createTestFixture("cruspiPriceModel", cruspiPricesPageModel);
 
 test.describe("CRUSpi Prices Page", () => {
 
-  test("can navigate straight to the correct URL", async ({ layout, cruspiPriceModel  }) => {
+  test("can navigate straight to the correct URL @unrestricted", async ({ layout, cruspiPriceModel  }) => {
     await cruspiPriceModel.load();
     await expect(layout.header).toHaveText(GlobalConstants.cruspiString);
   });
 
-  test("can navigate to cruspi prices page via the Prices menu", async ({ page, layout  }) => {
+  test("can navigate to cruspi prices page via the Prices menu @unrestricted", async ({ page, layout  }) => {
     await page.goto("/analysis");
     await layout.pricesTopNav.hover();
     await layout.cruspiMenuItem.click();
     await expect(layout.header).toHaveText(GlobalConstants.cruspiString);
   });
 
-  test("there are no tabs on the CRUSpi page and page structure is as expected", async ({ page, layout, cruspiPriceModel  }) => {
+  test("there are no tabs on the CRUSpi page and page structure is as expected @unrestricted", async ({ page, layout, cruspiPriceModel  }) => {
     await cruspiPriceModel.load();
     await expect(layout.header).toHaveText(GlobalConstants.cruspiString);
 

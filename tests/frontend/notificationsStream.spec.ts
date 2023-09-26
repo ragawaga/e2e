@@ -24,7 +24,7 @@ test.describe("Notifications Stream", () => {
     await expect(page).toHaveURL("/notifications");
   });
 
-  test("filter Type should show and have the 5 Notifications options", async ({ notificationsStream, page, layout }) => {
+  test("filter Type should show and have the 5 Notifications options @unrestricted", async ({ notificationsStream, page, layout }) => {
     await notificationsStream.typeFilter.click();
     await expect(notificationsStream.platformUpdateType).toBeVisible();
     await expect(notificationsStream.priceNoticeType).toBeVisible();
@@ -69,7 +69,7 @@ test.describe("Notifications Stream", () => {
     });
   });
 
-  test("sends date filter to API", async ({ notificationsStream, page, layout }) => {
+  test("sends date filter to API @unrestricted", async ({ notificationsStream, page, layout }) => {
 
     //Set the Published start and end dates
     await notificationsStream.publishedFilter.click();
@@ -92,7 +92,7 @@ test.describe("Notifications Stream", () => {
   test("filter notifications with start and end date of today brings No results found ", async ({ notificationsStream, page, layout }) => {
     
     //This test could fail when someone is working on Notifications 
-    //and actively publishing them on dev
+    //and actively publishing them on dev, but I am just migrating what's there...
     
     //Build today's date
     const date = new Date();

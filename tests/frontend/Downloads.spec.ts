@@ -8,7 +8,7 @@ const test = createTestFixture("downloadsModel", DownloadsPageModel);
 
 test.describe("Downloads Page", () => {
 
-  test("Prices table download file", async ({ page, downloadsModel }) => {
+  test("Prices table download file @unrestricted", async ({ page, downloadsModel }) => {
     await page.goto("/prices/aluminium?tab=weekly");
     //click the prices download button
     downloadsModel.pricesDownloadButton.first().click();

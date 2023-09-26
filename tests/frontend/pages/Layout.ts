@@ -14,7 +14,8 @@ export const GlobalConstants = {
 export function layoutPageModel(page: Page) {
   return createComponentLocators(page, {
     header: "h1",
-    userMenu: { role: "button", name: "John Smith" },
+    userMenu: "#chw-header-user-moniker button",
+    impersonateMenuOption: { testId: "impersonate-user-btn"},
     pricesTopNav: { role: "button", name: 'Prices', exact: true },
     downloadsTopNav: { role: "link", name: 'Downloads', exact: true },
     cruspiMenuItem: { role: "link", name: GlobalConstants.cruspiString },
