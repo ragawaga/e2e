@@ -21,6 +21,7 @@ export function SavedSearchPageModel(page: Page) {
     savedSearchesArticleTitle: { testId: "saved-searches-article-title" },
     savedSearchesArticleDeleteButton: { testId: "saved-searches-article-delete" },
     deletedSavedSearchUndoButton: { testId: "undo-button" },
+    savedSearchInput: { testId: "input-saved-search-input" },
   });
 
   return {
