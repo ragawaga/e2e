@@ -4,7 +4,7 @@ import { notificationArticleConstants, notificationsArticlePageModel } from "./p
 
 const test = createTestFixture("notificationArticle", notificationsArticlePageModel);
 
-test.describe("Notification Article Screen", () => {
+test.describe("Notification Article Screen @unrestricted", () => {
   test("should have a body and header", async ({ notificationArticle, page, layout }) => {
     // It should have a title in the banner.
     // It should have a Publication date and Bodytext.
@@ -33,7 +33,7 @@ test.describe("Notification Article Screen", () => {
   });
 });
 
-test.describe("tags", () => {
+test.describe("tags @unrestricted", () => {
   test.beforeEach(async ({ notificationArticle }) => await notificationArticle.load(notificationArticleConstants.articleWithAuthorAndTags));
 
   test("article contains platform priority tags", async ({ notificationArticle }) => {
@@ -45,7 +45,7 @@ test.describe("tags", () => {
   });
 });
 
-test.describe("media", () => {
+test.describe("media @unrestricted", () => {
   test("article contains document links", async ({ notificationArticle }) => {
     //Downloads section of the template should be presented, if there are 1 or more documents attached to the article.
     await notificationArticle.load(notificationArticleConstants.articleWithAuthorAndTags);
@@ -53,7 +53,7 @@ test.describe("media", () => {
   });
 });
 
-test.describe("does NOT have featured and related items", () => {
+test.describe("does NOT have featured and related items @unrestricted", () => {
   test.beforeEach(async ({ notificationArticle }) => await notificationArticle.load(notificationArticleConstants.articleWithAuthorAndTags));
 
   test("article does NOT contains related articles", async ({ notificationArticle }) => {

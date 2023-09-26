@@ -5,6 +5,7 @@ export function articlePageModel(page: Page) {
   const screen = createComponentLocators(page, {
     content: { testId: "article-content" },
     authors: { testId: "author-container" },
+    analystAccessButoon: { testId: "analysts-contact-access-button"},
     authorImages: { testId: "author-image" },
     relatedArticles: { testId: "related-articles-row" },
     platformPriorityTags: { testId: "platform-tags" },

@@ -5,10 +5,18 @@ import { articlePageModel } from "./pages/ArticlePage";
 const test = createTestFixture("article", articlePageModel);
 
 test.describe("Article Screen", () => {
-  test("should have a body and header", async ({ article, page, layout }) => {
+  test("should have a body and header  @unrestricted", async ({ article, page, layout }) => {
     await page.goto("/analysis/article/143080");
     await expect(layout.header).toBeVisible();
     await expect(article.content).toBeVisible();
+  });
+
+  test("should have a body and header but no authors as basic level client @restricted", async ({ article, page, layout }) => {
+    await page.goto("/analysis/article/153266");
+    await expect(layout.header).toBeVisible();
+    await expect(article.content).toBeVisible();
+    await expect(article.authors).not.toHaveText("Email Me");
+    await expect(article.analystAccessButoon).toBeVisible();
   });
 
   test.describe("authors", () => {
@@ -17,7 +25,7 @@ test.describe("Article Screen", () => {
       await expect(article.authorImages.first()).toBeVisible();
     });
 
-    test("article does not contain an author", async ({ article }) => {
+    test("article does not contain an author @unrestricted", async ({ article }) => {
       await article.load(132643);
       await expect(article.authors).toBeHidden();
     });
@@ -36,18 +44,18 @@ test.describe("Article Screen", () => {
   });
 
   test.describe("media", () => {
-    test("article contains document links", async ({ article }) => {
+    test("article contains document links @unrestricted", async ({ article }) => {
       await article.load(142709);
       await expect(article.attachments).toHaveCount(2);
     });
 
-    test("article contains image", async ({ article }) => {
+    test("article contains image @unrestricted", async ({ article }) => {
       await article.load(139961);
       await expect(article.content.locator("img").first()).toBeVisible();
     });
   });
 
-  test.describe("has featured and related items", () => {
+  test.describe("has featured and related items @unrestricted", () => {
     test.beforeEach(async ({ article }) => await article.load(143080));
 
     test("article contains relevant articles", async ({ article }) => {

@@ -6,7 +6,7 @@ import { pricesOverviewPageModel } from "./pages/PricesOverviewPage";
 
 const test = createTestFixture("pricesOverview", pricesOverviewPageModel)
 
-test.describe("Prices overview tab page", () => {
+test.describe("Prices overview tab page @unrestricted", () => {
   test("Display Latest Prices price cards", async ({ pricesOverview }) => {
 
     await pricesOverview.load("aluminium");

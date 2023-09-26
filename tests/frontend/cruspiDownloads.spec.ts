@@ -7,7 +7,7 @@ const test = createTestFixture("cruspiDownloadsModel", cruspiDownloadsPageModel)
 
 test.describe("CRUSpi Downloads Page", () => {
 
-  test("Navigate to CRUspi downloads page", async ({ page, layout, cruspiDownloadsModel  }) => {
+  test("Navigate to CRUspi downloads page @unrestricted", async ({ page, layout, cruspiDownloadsModel  }) => {
 
     //Navigate directly the known URL
     await cruspiDownloadsModel.load();
