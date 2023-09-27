@@ -10,7 +10,6 @@ resources:
         stages:
           - U4
           - U5
-          - PROD
 
 schedules:
   - cron: '0 18 * * *'
