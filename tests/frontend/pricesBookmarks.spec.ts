@@ -16,10 +16,11 @@ test.describe("Prices bookmarking @unrestricted", () => {
     // Navigate to the aluminium weekly price tab.
     await pricesWeekly.load("aluminium");
 
-    // Wait for AG-Grid to render and generate a selector.
-    await pricesWeekly.page.waitForSelector(".ag-theme-material.prices-table", {
-      timeout,
-    });
+    pricesWeekly.aggridPricesTable.waitFor,
+      {
+        state: "visible",
+        timeout: timeout,
+      };
 
     // Get the aluminium price bookmark button.
     const priceBookmarkButton = pricesWeekly.page.locator(
