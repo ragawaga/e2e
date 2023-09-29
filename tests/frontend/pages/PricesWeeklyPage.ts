@@ -2,9 +2,7 @@ import { Page } from "@playwright/test";
 import { createComponentLocators } from "../../component";
 
 export function pricesWeeklyPageModel(page: Page) {
-  const screen = createComponentLocators(page, {
-    agGridPriceTable: ".ag-theme-material.prices-table",
-  });
+  const screen = createComponentLocators(page, {});
 
   return {
     async load(id: string) {

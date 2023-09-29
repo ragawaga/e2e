@@ -16,7 +16,7 @@ test.describe("Prices bookmarking @unrestricted", () => {
     // Navigate to the aluminium weekly price tab.
     await pricesWeekly.load("aluminium");
 
-    // Check AG-Grid has rendered and generated a selector.
+    // Wait for AG-Grid to render and generate a selector.
     await pricesWeekly.page.waitForSelector(".ag-theme-material.prices-table", {
       timeout,
     });
@@ -26,12 +26,12 @@ test.describe("Prices bookmarking @unrestricted", () => {
       `button[data-testId="bookmark-price-button"][data-articleid="${priceId}"]`
     );
 
-    // Check if already bookmarked.
+    // Check if price is already bookmarked.
     const isBookmarked = await priceBookmarkButton.getAttribute(
       "data-selected"
     );
 
-    // If bookmarked, click it to unbookmark it.
+    // If price is bookmarked, click it to unbookmark.
     // eslint-disable-next-line playwright/no-conditional-in-test
     if (isBookmarked === "true") {
       await priceBookmarkButton.click();
@@ -48,10 +48,10 @@ test.describe("Prices bookmarking @unrestricted", () => {
       `a[href="/price/${priceId}"]`
     );
 
-    // Use waitForSelector to wait for the anchor to appear.
+    // Wait for the anchor to appear.
     await bookmarkedPrice.waitFor({ state: "visible", timeout });
 
-    // Check that the bookmarked price exists.
+    // Check that the bookmarked price is visible.
     await expect(bookmarkedPrice).toBeVisible();
   });
 });
