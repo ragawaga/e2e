@@ -26,11 +26,6 @@ test.describe("Search bar search", () => {
   });
 
   test("Search with common search term", async ({ page }) => {
-    await page.routeFromHAR("./hars/fruit.har", {
-      url: "*/api/*",
-      update: true,
-    });
-
     const searchTerm = "china";
     const expectedPageSize = 20;
     await page.goto("/");
