@@ -1,4 +1,9 @@
-import { PlaywrightTestConfig, defineConfig, devices } from "@playwright/test";
+import {
+  PlaywrightTestConfig,
+  PlaywrightTestProject,
+  defineConfig,
+  devices,
+} from "@playwright/test";
 import dotenv from "dotenv";
 import dotenvExpand from "dotenv-expand";
 import {
@@ -17,6 +22,13 @@ dotenvExpand.expand(localConfig);
 
 const environmentConfig = dotenv.config({ path: `.env.${environment}` });
 const environmentConfigResult = dotenvExpand.expand(environmentConfig);
+
+const extraTestOptions: Partial<PlaywrightTestProject> = {};
+const readOnlyEnvironments = ["prod"];
+
+if (readOnlyEnvironments.includes(environment)) {
+  extraTestOptions.grep = new RegExp(`@${environment}`, "i");
+}
 
 let hasConfigError = false;
 for (const key in environmentConfigResult.parsed) {
@@ -132,6 +144,7 @@ export default defineConfig({
       testDir: "./tests/frontend",
       dependencies: ["frontend-setup"],
       testMatch: /.*\.spec\.ts/,
+      ...extraTestOptions,
     },
     {
       name: "frontend-restricted",
@@ -144,6 +157,7 @@ export default defineConfig({
       testDir: "./tests/frontend",
       dependencies: ["frontend-restricted-setup"],
       testMatch: /.*\.spec\.ts/,
+      ...extraTestOptions,
     },
     {
       name: "editor",
@@ -155,6 +169,7 @@ export default defineConfig({
       testDir: "./tests/editor",
       dependencies: ["editor-setup"],
       testMatch: /.*\.spec\.ts/,
+      ...extraTestOptions,
     },
     /* Test against mobile viewports. */
     // {
