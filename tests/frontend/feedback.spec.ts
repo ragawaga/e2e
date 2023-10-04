@@ -1,7 +1,7 @@
 import { expect } from "@playwright/test";
 import { createTestFixture } from "../fixture";
 
-import { FeedbackPageConstants, FeedbackPageModel } from "./pages/FeedbackPage";
+import { FeedbackPageModel } from "./pages/FeedbackPage";
 
 const test = createTestFixture("feedbackModel", FeedbackPageModel);
 
@@ -12,18 +12,18 @@ test.describe("Feedback form visible and form elements existing", () => {
     await feedbackModel.feedbackDesktopButton.click();
     await expect(feedbackModel.feedbackRatingGroup).toBeVisible();
 
-    //check rating group has 5 checkboxes
-    await expect(feedbackModel.feedbackRatingGroup.getByTestId(FeedbackPageConstants.feedbackRadioItem)).toHaveCount(5);
-    //check target group has 5 checkboxes
-    await expect(feedbackModel.feedbackTargetGroup.getByTestId(FeedbackPageConstants.feedbackRadioItem)).toHaveCount(2);
+    //check rating group has 5 radio buttons
+    await expect(feedbackModel.feedbackRatingGroup.getByRole('radio')).toHaveCount(5);
+    //check target group has 2 radio buttons
+    await expect(feedbackModel.feedbackTargetGroup.getByRole('radio')).toHaveCount(2);
     await expect(feedbackModel.feedbackSubmitButton).toBeDisabled();
 
     await expect(feedbackModel.feedbackTextArea).toBeVisible();
     await feedbackModel.feedbackTextArea.type("Feedback entered via the Plawyright test suite");
 
     //click a radio buton in each radio button list i.e. Rating and Target
-    await feedbackModel.feedbackRatingGroup.getByTestId(FeedbackPageConstants.feedbackRadioItem).first().click();
-    await feedbackModel.feedbackTargetGroup.getByTestId(FeedbackPageConstants.feedbackRadioItem).first().click();
+    await feedbackModel.feedbackRatingGroup.getByRole('radio').first().click();
+    await feedbackModel.feedbackTargetGroup.getByRole('radio').first().click();
     await expect(feedbackModel.feedbackSubmitButton).not.toBeDisabled();
   });
 
@@ -68,22 +68,22 @@ test.describe("Feedback form submit", () => {
     await feedbackModel.feedbackDesktopButton.click();
     await expect(feedbackModel.feedbackRatingGroup).toBeVisible();
 
-    //check rating group has 5 checkboxes
-    await expect(feedbackModel.feedbackRatingGroup.getByTestId(FeedbackPageConstants.feedbackRadioItem)).toHaveCount(5);
-    //check target group has 5 checkboxes
-    await expect(feedbackModel.feedbackTargetGroup.getByTestId(FeedbackPageConstants.feedbackRadioItem)).toHaveCount(2);
+    //check rating group has 5 radio buttons
+    await expect(feedbackModel.feedbackRatingGroup.getByRole('radio')).toHaveCount(5);
+    //check target group has 2 radio buttons
+    await expect(feedbackModel.feedbackTargetGroup.getByRole('radio')).toHaveCount(2);
     await expect(feedbackModel.feedbackSubmitButton).toBeDisabled();
 
     await expect(feedbackModel.feedbackTextArea).toBeVisible();
     await feedbackModel.feedbackTextArea.type("Feedback entered via the Plawyright test suite");
 
     //click a radio buton in each radio button list i.e. Rating and Target
-    await feedbackModel.feedbackRatingGroup.getByTestId(FeedbackPageConstants.feedbackRadioItem).first().click();
-    await feedbackModel.feedbackTargetGroup.getByTestId(FeedbackPageConstants.feedbackRadioItem).first().click();
+    await feedbackModel.feedbackRatingGroup.getByRole('radio').first().click();
+    await feedbackModel.feedbackTargetGroup.getByRole('radio').first().click();
     await expect(feedbackModel.feedbackSubmitButton).not.toBeDisabled();
     await feedbackModel.feedbackSubmitButton.click();
 
-    await expect(feedbackModel.feedbackFormTitle.first()).toContainText("Thank you for submitting your feedback on CRU Online.")
+    await expect(feedbackModel.feedbackFormTitle.first()).toContainText("Thank you for submitting your feedback on CRU Online.");
 
   });
 
