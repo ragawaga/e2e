@@ -8,8 +8,8 @@ export const priceDetailConstants = {
     platformTags: '.platform-tags__list-item',
   },
   number: {
-    priceAnalysisArticleCount: 5,
-    priceNewsArticleCount: 3
+    priceAnalysisArticleCount: 3,
+    priceNewsArticleCount: 5
   },
   testId: {
     articleItemHeadingLink: 'article-item-heading-link',
