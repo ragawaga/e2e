@@ -39,8 +39,8 @@ export function priceDetailPageModel(page: Page) {
     pricesTable: { testId: "prices-table" },
     chartDlMenu: { role: 'button', name: /view chart menu/i },
     downloadXLS: { text: /download xls/i },
-    analysisArticles: { testId: "price-detail-analysis" },
-    newsArticles: { testId: "price-detail-news" },
+    analysisArticles: { testId: "price-detail-Analysis" },
+    newsArticles: { testId: "price-detail-News" },
   });
 
   return {
