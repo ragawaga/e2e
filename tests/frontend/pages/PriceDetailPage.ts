@@ -8,8 +8,8 @@ export const priceDetailConstants = {
     platformTags: '.platform-tags__list-item',
   },
   number: {
-    priceAnalysisArticleCount: 3,
-    priceNewsArticleCount: 5
+    priceAnalysisArticleCount: 5,
+    priceNewsArticleCount: 3
   },
   testId: {
     articleItemHeadingLink: 'article-item-heading-link',
@@ -39,8 +39,8 @@ export function priceDetailPageModel(page: Page) {
     pricesTable: { testId: "prices-table" },
     chartDlMenu: { role: 'button', name: /view chart menu/i },
     downloadXLS: { text: /download xls/i },
-    analysisArticles: { testId: "price-detail-analysis" },
-    newsArticles: { testId: "price-detail-news" },
+    analysisArticles: { testId: "price-detail-Analysis" },
+    newsArticles: { testId: "price-detail-News" },
   });
 
   return {
