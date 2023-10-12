@@ -6,6 +6,7 @@ export const priceDetailConstants = {
     article: 'article',
     articleItemDate: '.chw-article-item__date',
     platformTags: '.platform-tags__list-item',
+    priceNotice: '.gtm-prices-detail-price-notice-article-link',
   },
   number: {
     priceAnalysisArticleCount: 3,
@@ -31,7 +32,7 @@ export const priceDetailConstants = {
 
 export function priceDetailPageModel(page: Page) {
   const screen = createComponentLocators(page, {
-    pageHeading: { testId: 'chw-pagebanner_background'},
+    pageHeading: { testId: 'chw-pagebanner_background' },
     contentHeading: { testId: "content-heading" },
     myPricesButton: { role: 'link', name: /my prices/i },
     printButton: { role: 'button', name: /print/i },
@@ -41,6 +42,7 @@ export function priceDetailPageModel(page: Page) {
     downloadXLS: { text: /download xls/i },
     analysisArticles: { testId: "price-detail-Analysis" },
     newsArticles: { testId: "price-detail-News" },
+    priceNotice: { testId: "price-detail-PriceNotice" },
   });
 
   return {

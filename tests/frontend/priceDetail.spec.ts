@@ -9,7 +9,7 @@ import { GlobalConstants } from "./pages/Layout";
 const test = createTestFixture("priceDetail", priceDetailPageModel)
 
 test.describe("Price Detail page", () => {
-  
+
   test("Display Ferromanganese price detail page @unrestricted", async ({ priceDetail }) => {
     await priceDetail.load(543);
 
@@ -55,8 +55,10 @@ test.describe("Price Detail page", () => {
     await expect(priceDetail.myPricesButton).toHaveAttribute('href', priceDetailConstants.text.myCruURL);
   });
 
-  test("Display Price Analysis and Price News Articles with correct counts @unrestricted", async ({ priceDetail }) => {
+  test("Display Price Analysis and Price News Articles with correct counts @unrestricted", async ({ priceDetail, page }) => {
     await priceDetail.load(1001);
+    await page.waitForLoadState('networkidle');
+
     await expect(priceDetail.analysisArticles.locator(priceDetailConstants.css.article)).toHaveCount(priceDetailConstants.number.priceAnalysisArticleCount);
     await expect(priceDetail.newsArticles.locator(priceDetailConstants.css.article)).toHaveCount(priceDetailConstants.number.priceNewsArticleCount);
   });
@@ -90,21 +92,21 @@ test.describe("Price Detail page", () => {
   });
 
   test("News Article relevant fields and controls should be displayed @unrestricted", async ({ priceDetail }) => {
-  await priceDetail.load(1001);
+    await priceDetail.load(1001);
 
     // News should not have teaser
-      const el = priceDetail.newsArticles.locator(priceDetailConstants.css.article).first();
-      const platformTagsItem = el.locator(priceDetailConstants.css.platformTags).first();
-      const headingLink = el.getByTestId(priceDetailConstants.testId.articleItemHeadingLink);
-      const teaser = el.getByTestId(priceDetailConstants.testId.teaser);
-      const date = el.locator(priceDetailConstants.css.articleItemDate);
-      const firstBookmark = el.getByTestId(priceDetailConstants.testId.bookmarkWidget)
-      
-      await expect(platformTagsItem).toHaveText(priceDetailConstants.text.newsPlatformTagValues);
-      await expect(headingLink).toHaveText(priceDetailConstants.text.anyText);
-      await expect(teaser).toHaveText(priceDetailConstants.text.emptyStr);
-      await expect(date).toHaveText(priceDetailConstants.text.anyText);
-      await expect(firstBookmark).toBeVisible();
+    const el = priceDetail.newsArticles.locator(priceDetailConstants.css.article).first();
+    const platformTagsItem = el.locator(priceDetailConstants.css.platformTags).first();
+    const headingLink = el.getByTestId(priceDetailConstants.testId.articleItemHeadingLink);
+    const teaser = el.getByTestId(priceDetailConstants.testId.teaser);
+    const date = el.locator(priceDetailConstants.css.articleItemDate);
+    const firstBookmark = el.getByTestId(priceDetailConstants.testId.bookmarkWidget)
+
+    await expect(platformTagsItem).toHaveText(priceDetailConstants.text.newsPlatformTagValues);
+    await expect(headingLink).toHaveText(priceDetailConstants.text.anyText);
+    await expect(teaser).toHaveText(priceDetailConstants.text.emptyStr);
+    await expect(date).toHaveText(priceDetailConstants.text.anyText);
+    await expect(firstBookmark).toBeVisible();
   });
 
   test("News Article bookmark widget works @unrestricted", async ({ priceDetail }) => {
@@ -115,6 +117,81 @@ test.describe("Price Detail page", () => {
     const selectedAfterClick = (!selectedNow).toString();
     await firstBookmark.click();
     await expect(firstBookmark).toHaveAttribute(GlobalConstants.isSelectedAttribute, selectedAfterClick);
+
   });
+
+
+
+  test("Display Price Notice section @unrestricted", async ({ priceDetail, page }) => {
+    //Confirms the Price Notice section is retrieved
+    await priceDetail.load(1001);
+    await page.waitForLoadState('networkidle')
+    expect(priceDetail.priceNotice).toBeAttached();
+  });
+
+  test("2 Articles displayed in Price Notice section @unrestricted", async ({ priceDetail, page }) => {
+    //Counts the number of articles listed in the Price Notice section, reports a failure if there are not 2 articles returned
+    await priceDetail.load(1001);
+    await page.waitForLoadState('networkidle')
+    const priceNoticeArticleCount = await page.getByTestId('price-detail-PriceNotice').getByRole('article').count();
+    expect(priceNoticeArticleCount).toEqual(2);
+  });
+
+
+
+
+  //Only present articles which have been published in the past 18 months from the current date; with the date range configuration based.
+  test("Only articles from the past 18 months displayed @unrestricted", async ({ priceDetail, page }) => {
+    //
+    await priceDetail.load(1001);
+    await page.waitForLoadState('networkidle')
+
+    // Retrieve the article dates
+    const firstDateElement = await page.getByTestId('price-detail-PriceNotice').getByRole('time').nth(0);
+    const secondDateElement = await page.getByTestId('price-detail-PriceNotice').getByRole('time').nth(1);
+
+    const firstDateString = await firstDateElement.textContent();
+    const secondDateString = await secondDateElement.textContent();
+
+
+
+    if (firstDateString === null) {
+      throw new Error("First article date not found");
+    }
+    const firstDate = Date.parse(firstDateString);
+
+
+    // calculate date 18 months before "today"
+    const eighteenMonthsAgo = Date.now() - 18 * 30 * 24 * 60 * 60 * 1000; // months * days * hours * minutes * seconds * milliseconds
+    // Check if the first date is more than 18 months ago
+    if (firstDate < eighteenMonthsAgo) {
+      throw new Error("The first article is dated more than 18 months ago");
+    }
+
+
+
+
+    if (secondDateString === null) {
+      throw new Error("Second article date not found");
+    }
+    const secondDate = Date.parse(secondDateString);
+
+
+    // Check if the first date is more than 18 months ago
+    if (secondDate < eighteenMonthsAgo) {
+      throw new Error("The second article date is more than 18 months ago");
+    }
+
+
+  });
+
+
+  //Each article listed should display Platform Priority Tags, Title, Published Date and Documents available with the ability to Bookmark the article.
+
+  //See more - link to the Notifications listing with the Price Notice content type selected as the filter value
+
+  //Analytics should track article interaction from these Price point dashboard listing pages
+
+  //Current bookmarked Price point data should be leveraged to inform the testing strategy. Test strategy should focus on testing the currently bookmarked prices, and assessing how the content presented per Price differs based on different Acode combinations.
 
 });

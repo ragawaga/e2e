@@ -22,7 +22,7 @@ test.afterEach(async ({ feedbackModel }) => {
   //click a radio buton in each radio button list i.e. Rating and Target
   await feedbackModel.feedbackRatingGroup.getByRole('radio').first().click();
   await feedbackModel.feedbackTargetGroup.getByRole('radio').first().click();
-  await expect(feedbackModel.feedbackSubmitButton).not.toBeDisabled();
+  await expect(feedbackModel.feedbackSubmitButton).toBeEnabled();
 
   if (triggerSubmit) {
     await feedbackModel.feedbackSubmitButton.click();
@@ -37,16 +37,18 @@ test.describe("Feedback form visible and form elements existing", () => {
     await page.goto("/analysis");
   });
 
-  test("Feedback form is visible on aluminium prices page", async ({ page }) => {
-    await page.goto("/prices/Aluminium");
+  test("Feedback form is visible on aluminium prices page @unrestricted", async ({ page }) => {
+    await page.goto("/prices/aluminium");
+
   });
 
   test("Feedback form is visible on downloads page", async ({ page }) => {
     await page.goto("/downloads");
   });
 
-  test("Feedback form is visible on downloads aluminum monitor page", async ({ page }) => {
-    await page.goto("/downloads/Monitor/Aluminium");
+  test("Feedback form is visible on downloads aluminum monitor page @unrestricted", async ({ page }) => {
+    await page.goto("/downloads/monitor/aluminium");
+
   });
 
   test("Feedback form is visible on My Cru page", async ({ page }) => {
